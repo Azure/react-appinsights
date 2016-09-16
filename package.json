@@ -1,0 +1,26 @@
+{
+  "name": "react-ai",
+  "version": "1.0.0",
+  "description": "React Application Insights module",
+  "main": "/src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anastasiia-zolochevska/react-ai.git"
+  },
+  "keywords": [
+    "react",
+    "AppInsights"
+  ],
+  "author": "Anastasia Zolochevska <anastasiia.zolochevska@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anastasiia-zolochevska/react-ai/issues"
+  },
+  "homepage": "https://github.com/anastasiia-zolochevska/react-ai#readme",
+  "dependencies": {
+    "react": "^15.3.1"
+  }
+}
