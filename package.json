@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/anastasiia-zolochevska/react-ai#readme",
   "dependencies": {
+    "applicationinsights-js": "^1.0.0",
     "react": "^15.3.1"
   }
 }
