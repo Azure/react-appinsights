@@ -1,15 +1,22 @@
-import React from 'react';
 import {AppInsights} from "applicationinsights-js"
 
-class ReactAI extends React.Component {
-    
-    initialize (options) {
+
+var ReactAI = {
+    initialize: function(appInsightsOptions, history){
         AppInsights.downloadAndSetup(options);
         AppInsights.trackPageView();
-    }
-    
-    trackPageChange(){
-        appInsights.trackPageView(null, null, {'Full Page Url': window.location.pathname});
-    }
+        appInsights.trackPageView(null, null, {urlReferrer: document.referrer});
+
+
+        history.listen(location => {
+            console.log("listen: " + location.pathname)
+        })
+
+        history.listenBefore(location => {
+            console.log("listenBefore: " + location.pathname);
+            AppInsights.trackPageView();
+        })
+    },
 }
-export default ReactAI;
+
+module.exports = ReactAI;
