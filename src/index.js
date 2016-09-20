@@ -2,21 +2,25 @@ import {AppInsights} from "applicationinsights-js"
 
 
 var ReactAI = {
-    initialize: function(appInsightsOptions, history){
-        AppInsights.downloadAndSetup(options);
-        AppInsights.trackPageView();
-        appInsights.trackPageView(null, null, {urlReferrer: document.referrer});
-
-
+    init: function(appInsightsOptions, history){
+        AppInsights.downloadAndSetup(appInsightsOptions);
+        
+        var self = this;
         history.listen(location => {
-            console.log("listen: " + location.pathname)
+            self.trackPageView();
         })
 
-        history.listenBefore(location => {
-            console.log("listenBefore: " + location.pathname);
-            AppInsights.trackPageView();
-        })
     },
+
+    trackPageView(){
+        AppInsights.trackPageView();
+    },
+
+    ai(){
+        return AppInsights;
+    }
+
+
 }
 
 module.exports = ReactAI;
