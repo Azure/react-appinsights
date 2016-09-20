@@ -13,7 +13,7 @@ export const ReactAI = {
     },
 
     ai(){
-        return AppInsights
+        return AppInsights;
     },
 
     setAppContext: function(properties){
@@ -32,5 +32,3 @@ export const ReactAI = {
     }
    
 }
-
-;
