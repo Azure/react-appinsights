@@ -5,22 +5,32 @@ var ReactAI = {
     init: function(appInsightsOptions, history){
         AppInsights.downloadAndSetup(appInsightsOptions);
         
-        var self = this;
         history.listen(location => {
-            self.trackPageView();
-        })
+            AppInsights.trackPageView();
+        });
 
-    },
-
-    trackPageView(){
-        AppInsights.trackPageView();
+        this.setAppContext({urlReferrer:document.referrer});
     },
 
     ai(){
-        return AppInsights;
+        return AppInsights
+    },
+
+    setAppContext(properties){
+        appInsights.queue.push(function () {
+            appInsights.context.addTelemetryInitializer(function (envelope) {
+                var telemetryItem = envelope.data.baseData;
+
+                // To set custom properties:
+                telemetryItem.properties = telemetryItem.properties || {};
+                for (var key in properties) {
+                    telemetryItem.properties[key] = properties[key];
+                }
+                
+            })
+        });
     }
-
-
+   
 }
 
 module.exports = ReactAI;
