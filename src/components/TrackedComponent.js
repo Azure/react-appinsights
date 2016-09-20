@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {AppInsights} from "applicationinsights-js"
-var away = require('away');
+import away from 'away';
 
 export const TrackedComponent = React.createClass({
   displayName: "TrackedComponent",
@@ -12,7 +12,6 @@ export const TrackedComponent = React.createClass({
 
   componentWillMount:function (){
     this.componentWillMountTime = Date.now();
-    this.idleTimeInMs = 0;
   },
 
   componentDidMount:function (){
@@ -32,7 +31,7 @@ export const TrackedComponent = React.createClass({
         self.startIdleTimer = Date.now();
     });
     timer.on('active', function() {
-        self.idleTimeInMs = self.idleTimeInMs+(Date.now()-self.startIdleTimer);
+        self.idleTimeInMs = self.idleTimeInMs?self.idleTimeInMs:0+(Date.now()-self.startIdleTimer);
     });
 
 
@@ -42,7 +41,7 @@ export const TrackedComponent = React.createClass({
      if(this.componentWillMountTime){
         AppInsights.trackMetric(
           "React Component life duration", 
-          Date.now() - this.componentWillMountTime - this.idleTimeInMs,
+          Date.now() - this.componentWillMountTime - (this.idleTimeInMs?this.idleTimeInMs:0),
           1,
           null,
           null,
