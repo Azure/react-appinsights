@@ -17,8 +17,10 @@ npm install react-ai --save
 
 1. To initialize AppInsights add following to index.js:
 
+```javascript
     import {ReactAI} from 'react-ai';
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
+```
 
     See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
 
@@ -26,29 +28,33 @@ npm install react-ai --save
 
     a. Using history:
 
+```javascript
     import {ReactAI} from 'react-ai';
     import {Router, browserHistory} from 'react-router';
 
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, browserHistory);
+```
 
 Or
 
     b. Using router.onUpdate:
-
+```javascript
     import {ReactAI} from 'react-ai';
-
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 
     <Router routes={routes} history={browserHistory} onUpdate={ReactAI.trackRouterChange}/>
+```
 
 
 3. To enable React component usage tracking, inherit from TrackedComponent  
 
+	```javascript
     import {TrackedComponent} from 'react-ai';
 
     class MyComponent extends TrackedComponent{
         ...
     }
+	```
 
     We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time (30 seconds of user inactivity). 
     This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp- idle time  
@@ -59,7 +65,10 @@ Or
 
 4. To augment all telemetry with aditional properties use ReactAI.setAppContext method:
 
-    E.g. ReactAI.setAppContext({urlReferrer:document.referrer});
+    E.g. 
+    ```javascript
+    ReactAI.setAppContext({urlReferrer:document.referrer});
+    ```
 
     This will add urlReferrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
 
