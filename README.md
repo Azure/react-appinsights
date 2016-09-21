@@ -55,6 +55,14 @@ To enable React component usage tracking, inherit from TrackedComponent
     }
 ```
 
+TrackedComponent uses ComponentWillUnmount, ComponentWillMount and ComponentDidMount events to send telemetry, so if you override those, don't forget to call base methods:
+```javascript
+    componentWillMount() {
+        super.componentWillMount();
+        ..
+    }
+```
+
 We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time (30 seconds of user inactivity). 
 
 This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp - idle time.  
