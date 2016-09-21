@@ -7,7 +7,6 @@ export const ReactAI = {
         
         if(history){
             history.listen(location => {
-                console.log("History changed");
                 AppInsights.trackPageView();
             });
         }
@@ -20,7 +19,6 @@ export const ReactAI = {
     },
 
     trackRouterChange(){
-        console.log("Route changed");
         AppInsights.trackPageView();
     },
 
