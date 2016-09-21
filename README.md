@@ -8,7 +8,7 @@ It extends standard Application Insights functionality with additional react spe
 
 ## Installation
 
-With :
+With npm:
 ```bash
 npm install react-ai --save
 ```
