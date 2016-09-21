@@ -15,29 +15,29 @@ npm install react-ai --save
 
 ## Usage
 
-1. To initialize AppInsigt add following to index.js:
+1. To initialize AppInsights add following to index.js:
 
-import {ReactAI} from 'react-ai';
-ReactAI.init({instrumentationKey:'d4b3645a-9207-480c-b08c-ede7624ffd7f'});
+    import {ReactAI} from 'react-ai';
+    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 
-[How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/).
+    See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
 
 2. To track router changes
 
-    a) Using history:
+    a. Using history:
 
     import {ReactAI} from 'react-ai';
     import {Router, browserHistory} from 'react-router';
 
-    ReactAI.init({instrumentationKey:'d4b3645a-9207-480c-b08c-ede7624ffd7f'}, browserHistory);
+    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, browserHistory);
 
 Or
 
-    b) Using router.onUpdate:
+    b. Using router.onUpdate:
 
     import {ReactAI} from 'react-ai';
 
-    ReactAI.init({instrumentationKey:'d4b3645a-9207-480c-b08c-ede7624ffd7f'});
+    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 
     <Router routes={routes} history={browserHistory} onUpdate={ReactAI.trackRouterChange}/>
 
@@ -50,8 +50,8 @@ Or
         ...
     }
 
-    This approach will measure time from component willMount event through willUnmount time. However, in order to make this time more accurate it will subtract idle time (30 seconds of user inactivity). 
-    This means that Router Component Engaged Time = Component willUnmount timestamp - Component willMount timestamp- idle time  
+    We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time (30 seconds of user inactivity). 
+    This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp- idle time  
 
     To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the tom menu and configure one of the empty charts to display Custome metrics "React Component Engaged Time" grouped by Component Name.
 
