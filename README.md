@@ -61,22 +61,29 @@ This means that Router Component Engaged Time = ComponentWillUnmount timestamp -
 
 To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name.
 
-    <img src="https://cloud.githubusercontent.com/assets/3801171/18721652/43d6a092-7fe6-11e6-9d76-ca6280f3e36e.png"/>
+<img src="https://cloud.githubusercontent.com/assets/3801171/18725844/be489cf8-7ff6-11e6-92a5-3be4577eb036.png"/>
 
 #### Set Application Context
 
 To augment all telemetry with aditional properties use ReactAI.setAppContext method:
 
-    E.g. 
+E.g.
 ```javascript
     ReactAI.setAppContext({urlReferrer:document.referrer});
 ```
 
 This will add urlReferrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
 
-    <img src ="https://cloud.githubusercontent.com/assets/3801171/18721651/43c4861e-7fe6-11e6-8541-3614111acc8f.png"/>
+<img src ="https://cloud.githubusercontent.com/assets/3801171/18721651/43c4861e-7fe6-11e6-8541-3614111acc8f.png"/>
 
+#### Get AppInsights object
 
+Use following method to get original AppInsight object:
 
+```javascript
+    var AppInsigts = ReactAI.ai();
+```
+
+Refer to [this doc](https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md) for  information on Application Insights SDK JavaScript API. 
 
 
