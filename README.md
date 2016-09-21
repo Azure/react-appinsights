@@ -15,7 +15,7 @@ npm install react-ai --save
 
 ## Usage
 
-1. To initialize AppInsights add following to index.js:
+* To initialize AppInsights add following to index.js:
 
 ```javascript
     import {ReactAI} from 'react-ai';
@@ -24,7 +24,7 @@ npm install react-ai --save
 
     See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
 
-2. To track router changes
+* To track router changes
 
     a. Using history:
 
@@ -46,7 +46,7 @@ Or
 ```
 
 
-3. To enable React component usage tracking, inherit from TrackedComponent  
+* To enable React component usage tracking, inherit from TrackedComponent  
 
 	```javascript
     import {TrackedComponent} from 'react-ai';
@@ -63,7 +63,7 @@ Or
 
     <img src="https://cloud.githubusercontent.com/assets/3801171/18721652/43d6a092-7fe6-11e6-9d76-ca6280f3e36e.png"/>
 
-4. To augment all telemetry with aditional properties use ReactAI.setAppContext method:
+* To augment all telemetry with aditional properties use ReactAI.setAppContext method:
 
     E.g. 
     ```javascript
