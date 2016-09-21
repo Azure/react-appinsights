@@ -12,6 +12,14 @@ export const TrackedComponent = React.createClass({
 
   componentWillMount:function (){
     this.componentWillMountTime = Date.now();
+    var timer = away(30000);
+    var self=this;
+    timer.on('idle', function() {
+        self.startIdleTimer = Date.now();
+    });
+    timer.on('active', function() {
+        self.idleTimeInMs = self.idleTimeInMs?self.idleTimeInMs:0+(Date.now()-self.startIdleTimer);
+    });
   },
 
   componentDidMount:function (){
@@ -24,15 +32,6 @@ export const TrackedComponent = React.createClass({
         null,
         {'Component Name':this.constructor.displayName});
     }
-
-    var timer = away(30000);
-    var self=this;
-    timer.on('idle', function() {
-        self.startIdleTimer = Date.now();
-    });
-    timer.on('active', function() {
-        self.idleTimeInMs = self.idleTimeInMs?self.idleTimeInMs:0+(Date.now()-self.startIdleTimer);
-    });
   },
 
   componentWillUnmount: function(){
