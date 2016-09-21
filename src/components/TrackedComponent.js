@@ -22,10 +22,10 @@ export const TrackedComponent = React.createClass({
         1,
         null,
         null,
-        {Component:this.constructor.displayName});
+        {'Component Name':this.constructor.displayName});
     }
 
-    var timer = away(20000);
+    var timer = away(30000);
     var self=this;
     timer.on('idle', function() {
         self.startIdleTimer = Date.now();
@@ -33,19 +33,17 @@ export const TrackedComponent = React.createClass({
     timer.on('active', function() {
         self.idleTimeInMs = self.idleTimeInMs?self.idleTimeInMs:0+(Date.now()-self.startIdleTimer);
     });
-
-
   },
 
   componentWillUnmount: function(){
      if(this.componentWillMountTime){
         AppInsights.trackMetric(
-          "React Component life duration", 
+          "React Component Engaged Time", 
           Date.now() - this.componentWillMountTime - (this.idleTimeInMs?this.idleTimeInMs:0),
           1,
           null,
           null,
-          {Component:this.constructor.displayName});
+          {'Component Name' : this.constructor.displayName});
      }
   }
 });

@@ -5,15 +5,23 @@ export const ReactAI = {
     init: function(appInsightsOptions, history){
         AppInsights.downloadAndSetup(appInsightsOptions);
         
-        history.listen(location => {
-            AppInsights.trackPageView();
-        });
-
+        if(history){
+            history.listen(location => {
+                console.log("History changed");
+                AppInsights.trackPageView();
+            });
+        }
+       
         this.setAppContext({urlReferrer:document.referrer});
     },
 
     ai(){
         return AppInsights;
+    },
+
+    trackRouterChange(){
+        console.log("Route changed");
+        AppInsights.trackPageView();
     },
 
     setAppContext: function(properties){
