@@ -61,7 +61,7 @@ This means that Router Component Engaged Time = ComponentWillUnmount timestamp -
 
 To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name.
 
-<img src="https://cloud.githubusercontent.com/assets/3801171/18725844/be489cf8-7ff6-11e6-92a5-3be4577eb036.png"/>
+<img src="https://cloud.githubusercontent.com/assets/3801171/18726516/ab061cbc-7ff9-11e6-886a-c5309a3bfe0b.png"/>
 
 #### Set Application Context
 
