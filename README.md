@@ -8,23 +8,22 @@ It extends standard Application Insights functionality with additional react spe
 
 ## Installation
 
-With [npm](https://www.npmjs.com/):
+With :
 ```bash
 npm install react-ai --save
 ```
 
 ## Usage
 
-* To initialize AppInsights add following to index.js:
+1. To initialize AppInsights add following to index.js:
 
 ```javascript
     import {ReactAI} from 'react-ai';
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 ```
+See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
 
-    See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
-
-* To track router changes
+2. To track router changes
 
     a. Using history:
 
@@ -36,8 +35,8 @@ npm install react-ai --save
 ```
 
 Or
-
-    b. Using router.onUpdate:
+    b.Using Router.onUpdate:
+    
 ```javascript
     import {ReactAI} from 'react-ai';
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
@@ -46,7 +45,7 @@ Or
 ```
 
 
-* To enable React component usage tracking, inherit from TrackedComponent  
+3. To enable React component usage tracking, inherit from TrackedComponent  
 
 	```javascript
     import {TrackedComponent} from 'react-ai';
@@ -63,7 +62,7 @@ Or
 
     <img src="https://cloud.githubusercontent.com/assets/3801171/18721652/43d6a092-7fe6-11e6-9d76-ca6280f3e36e.png"/>
 
-* To augment all telemetry with aditional properties use ReactAI.setAppContext method:
+4. To augment all telemetry with aditional properties use ReactAI.setAppContext method:
 
     E.g. 
     ```javascript
