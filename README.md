@@ -69,7 +69,7 @@ This means that Router Component Engaged Time = ComponentWillUnmount timestamp -
 
 To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name.
 
-<img src="https://cloud.githubusercontent.com/assets/3801171/18726516/ab061cbc-7ff9-11e6-886a-c5309a3bfe0b.png"/>
+<img src="https://cloud.githubusercontent.com/assets/3801171/18735093/eeac0496-802f-11e6-9403-50c6fe8aaf9e.png"/>
 
 #### Set Application Context
 
@@ -82,7 +82,7 @@ E.g.
 
 This will add urlReferrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
 
-<img src ="https://cloud.githubusercontent.com/assets/3801171/18735093/eeac0496-802f-11e6-9403-50c6fe8aaf9e.png"/>
+<img src ="https://cloud.githubusercontent.com/assets/3801171/18721651/43c4861e-7fe6-11e6-8541-3614111acc8f.png"/>
 
 #### Get AppInsights object
 
