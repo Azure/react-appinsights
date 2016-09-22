@@ -1,4 +1,4 @@
-# react-ai
+# react-appinsights
 ### React Application Insights Module
 JavaScript module to include [Application Insights](https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md) to application built with React.
 It extends standard Application Insights functionality with additional react specific features:
@@ -10,7 +10,7 @@ It extends standard Application Insights functionality with additional react spe
 
 With npm:
 ```bash
-npm install react-ai --save
+npm install react-appinsights --save
 ```
 
 ## Usage
@@ -18,7 +18,7 @@ npm install react-ai --save
 To initialize Application Insights add following to index.js:
 
 ```javascript
-    import {ReactAI} from 'react-ai';
+    import {ReactAI} from 'react-appinsights';
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 ```
 See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
@@ -27,7 +27,7 @@ See [How to get instrumentation key for Applicaton Insights](https://azure.micro
 a. Using react-router history object:
     
 ```javascript
-    import {ReactAI} from 'react-ai';
+    import {ReactAI} from 'react-appinsights';
     import {Router, browserHistory} from 'react-router';
 
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, browserHistory);
@@ -37,7 +37,7 @@ Or
 b. Using Router.onUpdate:
 
 ```javascript
-    import {ReactAI} from 'react-ai';
+    import {ReactAI} from 'react-appinsights';
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 
     <Router routes={routes} history={browserHistory} onUpdate={ReactAI.trackRouterChange}/>
@@ -48,7 +48,7 @@ b. Using Router.onUpdate:
 To enable React component usage tracking, inherit from TrackedComponent  
 
 ```javascript
-    import {TrackedComponent} from 'react-ai';
+    import {TrackedComponent} from 'react-appinsights';
 
     class MyComponent extends TrackedComponent{
         ...

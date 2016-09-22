@@ -19,7 +19,7 @@ export const TrackedComponent = React.createClass({
         self.startIdleTimer = Date.now();
     });
     timer.on('active', function() {
-        self.idleTimeInMs += (Date.now()-self.startIdleTimer);
+        self.idleTimeInMs += Date.now()-self.startIdleTimer;
     });
   },
 
