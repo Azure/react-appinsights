@@ -1,9 +1,9 @@
 # react-ai
-### React Application Insights Module
-JavaScript module to include [Application Insights](https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md) to application built with React.
-It extends standard Application Insights functionality with additional react specific features:
-* Tracking router changes.
-* React components usage statistics.
+### ReactJS Application Insights Module
+JavaScript module to include [Application Insights](https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md) in an application built with ReactJS.
+It extends standard Application Insights functionality with additional ReactJS specific features:
+* Tracking react-router changes.
+* Component usage statistics.
 * API to extend standard telemetry with additional dimensions.
 
 ## Installation
