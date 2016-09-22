@@ -8,7 +8,7 @@ It extends standard Application Insights functionality with additional react spe
 
 ## Installation
 
-With :
+With npm:
 ```bash
 npm install react-ai --save
 ```
@@ -55,13 +55,21 @@ To enable React component usage tracking, inherit from TrackedComponent
     }
 ```
 
-We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time (30 seconds of user inactivity). 
+TrackedComponent uses ComponentWillUnmount and ComponentWillMount events to send telemetry, so if you override those, don't forget to call base methods:
+```javascript
+    componentWillMount() {
+        super.componentWillMount();
+        ..
+    }
+```
+
+We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time. 
 
 This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp - idle time.  
 
 To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name.
 
-<img src="https://cloud.githubusercontent.com/assets/3801171/18726516/ab061cbc-7ff9-11e6-886a-c5309a3bfe0b.png"/>
+<img src="https://cloud.githubusercontent.com/assets/3801171/18735093/eeac0496-802f-11e6-9403-50c6fe8aaf9e.png"/>
 
 #### Set Application Context
 
