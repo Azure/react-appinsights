@@ -55,7 +55,7 @@ To enable React component usage tracking, inherit from TrackedComponent
     }
 ```
 
-TrackedComponent uses ComponentWillUnmount, ComponentWillMount and ComponentDidMount events to send telemetry, so if you override those, don't forget to call base methods:
+TrackedComponent uses ComponentWillUnmount and ComponentWillMount events to send telemetry, so if you override those, don't forget to call base methods:
 ```javascript
     componentWillMount() {
         super.componentWillMount();
@@ -63,7 +63,7 @@ TrackedComponent uses ComponentWillUnmount, ComponentWillMount and ComponentDidM
     }
 ```
 
-We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time (30 seconds of user inactivity). 
+We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time. 
 
 This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp - idle time.  
 
@@ -82,7 +82,7 @@ E.g.
 
 This will add urlReferrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
 
-<img src ="https://cloud.githubusercontent.com/assets/3801171/18721651/43c4861e-7fe6-11e6-8541-3614111acc8f.png"/>
+<img src ="https://cloud.githubusercontent.com/assets/3801171/18735093/eeac0496-802f-11e6-9403-50c6fe8aaf9e.png"/>
 
 #### Get AppInsights object
 
