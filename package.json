@@ -1,6 +1,6 @@
 {
   "name": "react-appinsights",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React Application Insights module",
   "main": "lib/index.js",
   "scripts": {
@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/anastasiia-zolochevska/react-appinsights#readme",
   "dependencies": {
-    "appinsights-usage": "^1.0.0",
+    "appinsights-usage": "^1.0.1",
     "applicationinsights-js": "^1.0.0",
     "away": "^1.0.0",
     "history": "^4.2.0"
