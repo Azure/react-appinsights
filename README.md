@@ -27,7 +27,7 @@ See [How to get instrumentation key for Applicaton Insights](https://azure.micro
 a. Using react-router history object:
     
 ```javascript
-    import {ReactAI} from 'react-appinsights';
+    import ReactAI from 'react-appinsights';
     import {Router, browserHistory} from 'react-router';
 
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, browserHistory);
