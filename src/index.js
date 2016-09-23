@@ -1,4 +1,2 @@
-module.exports = {
-    ReactAI:require('./ReactAI').ReactAI, 
-    TrackedComponent:require('./components/TrackedComponent').TrackedComponent
-};
+module.exports = require('./ReactAI').ReactAI;
+module.exports.TrackedComponent=require('./components/TrackedComponent').TrackedComponent;

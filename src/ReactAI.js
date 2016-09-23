@@ -1,9 +1,11 @@
 import {AppInsights} from "applicationinsights-js"
+import AppInsightsUsage from "appinsights-usage"
 
 
 export const ReactAI = {
     init: function(appInsightsOptions, history){
         AppInsights.downloadAndSetup(appInsightsOptions);
+        AppInsightsUsage.init(appInsightsOptions);
         
         if(history){
             history.listen(location => {

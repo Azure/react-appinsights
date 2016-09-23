@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/anastasiia-zolochevska/react-appinsights#readme",
   "dependencies": {
+    "appinsights-usage": "^1.0.0",
     "applicationinsights-js": "^1.0.0",
     "away": "^1.0.0",
     "history": "^4.2.0"
