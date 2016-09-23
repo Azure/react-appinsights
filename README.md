@@ -18,7 +18,7 @@ npm install react-appinsights --save
 To initialize Application Insights add following to index.js:
 
 ```javascript
-    import {ReactAI} from 'react-appinsights';
+    var ReactAI  = require('react-appinsights');
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 ```
 See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
@@ -37,7 +37,7 @@ Or
 b. Using Router.onUpdate:
 
 ```javascript
-    import {ReactAI} from 'react-appinsights';
+    var ReactAI  = require('react-appinsights');
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 
     <Router routes={routes} history={browserHistory} onUpdate={ReactAI.trackRouterChange}/>
@@ -48,7 +48,7 @@ b. Using Router.onUpdate:
 To enable React component usage tracking, inherit from TrackedComponent  
 
 ```javascript
-    import {TrackedComponent} from 'react-appinsights';
+    var TrackedComponent = require ('react-appinsights').TrackedComponent;
 
     class MyComponent extends TrackedComponent{
         ...
@@ -67,7 +67,7 @@ We will measure time from ComponentWillMount event through ComponentWillUnmount 
 
 This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp - idle time.  
 
-To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name.
+To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name. It can take up to 10 minutes for new custom metric to appear in Azure Portal.
 
 <img img width="550" src="https://cloud.githubusercontent.com/assets/3801171/18735093/eeac0496-802f-11e6-9403-50c6fe8aaf9e.png"/>
 
