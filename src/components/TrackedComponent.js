@@ -1,16 +1,20 @@
 'use strict';
 
-import React from 'react';
+import React, {Component} from 'react';
 import {AppInsights} from "applicationinsights-js"
 import away from 'away';
 
-export const TrackedComponent = React.createClass({
-  displayName: "TrackedComponent",
-  render: function render() {
-    return false;
-  },
+export class TrackedComponent extends Component {
+  constructor() {
+    super();
+    this.displayName = "TrackedComponent";
+  }
 
-  componentWillMount:function (){
+  render() {
+    return false;
+  }
+
+  componentWillMount(){
     this.componentWillMountTimestamp = Date.now();
     this.idleTimeInMs = 0;
     var timer = away(30000);
@@ -21,9 +25,9 @@ export const TrackedComponent = React.createClass({
     timer.on('active', function() {
         self.idleTimeInMs += Date.now()-self.startIdleTimer;
     });
-  },
+  }
 
-  componentWillUnmount: function(){
+  componentWillUnmount(){
      if(!this.componentWillMountTimestamp){
        throw "ComponentWillMountTimestamp was not initialized. Check if super.componentWillMount() was called"
      }
@@ -36,4 +40,4 @@ export const TrackedComponent = React.createClass({
         {'Component Name' : this.constructor.displayName});
      
   }
-});
+}
