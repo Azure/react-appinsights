@@ -11,8 +11,8 @@ declare module 'react-appinsights' {
             history: History
         ): void;
         ai(): Microsoft.ApplicationInsights.IAppInsights;
-        trackRouterChange: () => any;
-        setAppContext: (properties: {}) => void;
+        trackRouterChange(): void;
+        setAppContext(properties: {}): void;
     }
   
     export class TrackedComponent<P = {}, S = {}> extends React.Component<P, S> {}
