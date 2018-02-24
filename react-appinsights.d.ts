@@ -19,5 +19,5 @@ declare module 'react-appinsights' {
   
     let ReactAI: IReactAI;
     export default ReactAI;
-  }
+}
   
