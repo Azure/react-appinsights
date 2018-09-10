@@ -43,8 +43,21 @@ b. Using Router.onUpdate:
     <Router routes={routes} history={browserHistory} onUpdate={ReactAI.trackRouterChange}/>
 ```
 
+#### Enable React component usage tracking with a higher-order component wrapper.
+To enable React component usage tracking with a higher-order component wrapper, you just need to call the function and pass in the component name string that 
+you would like to appear in Application Insights.
 
-#### Enable React component usage tracking 
+```javascript
+    import ReactAI from 'react-appinsights';
+
+    class MyComponent extends React.Component {
+        ... 
+    }
+
+    export default ReactAI.withTracking(MyComponent, "My Component");
+```
+
+#### Enable React component usage tracking by extending from TrackedComponent.
 To enable React component usage tracking, inherit from TrackedComponent  
 
 ```javascript

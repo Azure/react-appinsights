@@ -13,11 +13,14 @@ declare module 'react-appinsights' {
         ai(): Microsoft.ApplicationInsights.IAppInsights;
         trackRouterChange(): void;
         setAppContext(properties: {}): void;
+        withTracking(
+            WrappedComponent: React.Component, 
+            componentName: string
+        ): React.Component;
     }
-  
+
     export class TrackedComponent<P = {}, S = {}> extends React.Component<P, S> {}
-  
+
     let ReactAI: IReactAI;
     export default ReactAI;
 }
-  
