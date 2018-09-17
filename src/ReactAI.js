@@ -44,7 +44,7 @@ export const ReactAI = {
     withTracking(WrappedComponent, componentName) {
         // Note: This check can be better if Lodash is added as a dependency.
         if(componentName === undefined || componentName === null || typeof componentName !== 'string'){
-            throw "Component name is not defined or is not a string";
+            componentName = WrappedComponent.prototype.constructor.name;
         }
 
         return class extends React.Component {
