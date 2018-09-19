@@ -34,9 +34,8 @@ To track page views, pass a history object to the init method.
     ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, history);
 ```
 
-#### Enable React component usage tracking with a higher-order component wrapper.
-To enable React component usage tracking with a higher-order component wrapper, you just need to call the function and pass in the component name string that 
-you would like to appear in Application Insights.
+#### Enable React component usage tracking
+To enable React component usage tracking, you just need to call the function `withTracking`.
 
 ```javascript
     import ReactAI from 'react-appinsights';
@@ -45,31 +44,19 @@ you would like to appear in Application Insights.
         ... 
     }
 
-    export default ReactAI.withTracking(MyComponent, "My Component");
+    export default ReactAI.withTracking(MyComponent);
 ```
 
-#### Enable React component usage tracking by extending from TrackedComponent.
-To enable React component usage tracking, inherit from TrackedComponent  
+If for any reason you want to change the name string of the component that appears in Application Insights, 
+you can pass in a custom name as second argument of `withTracking`.
 
 ```javascript
-    var TrackedComponent = require ('react-appinsights').TrackedComponent;
-
-    class MyComponent extends TrackedComponent{
-        ...
-    }
+    export default ReactAI.withTracking(MyComponent, "CustomMyComponentName");
 ```
 
-TrackedComponent uses ComponentWillUnmount and ComponentWillMount events to send telemetry, so if you override those, don't forget to call base methods:
-```javascript
-    componentWillMount() {
-        super.componentWillMount();
-        ..
-    }
-```
+We will measure time from ComponentDidMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time. 
 
-We will measure time from ComponentWillMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time. 
-
-This means that Router Component Engaged Time = ComponentWillUnmount timestamp - ComponentWillMount timestamp - idle time.  
+This means that: `Component Engaged Time = ComponentWillUnmount timestamp - ComponentDidMount timestamp - idle time`.  
 
 To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name. It can take up to 10 minutes for new custom metric to appear in Azure Portal.
 
