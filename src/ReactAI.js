@@ -5,7 +5,7 @@ import away from 'away';
 
 
 export const ReactAI = {
-    init: function(appInsightsOptions, history){
+    init(appInsightsOptions, history){
         AppInsights.downloadAndSetup(appInsightsOptions);
         AppInsightsUsage.init(appInsightsOptions);
         
@@ -22,7 +22,7 @@ export const ReactAI = {
         return AppInsights;
     },
 
-    setAppContext: function(properties){
+    setAppContext(properties){
         appInsights.queue.push(function () {
             appInsights.context.addTelemetryInitializer(function (envelope) {
                 var telemetryItem = envelope.data.baseData;
