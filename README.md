@@ -24,23 +24,14 @@ To initialize Application Insights add following to index.js:
 See [How to get instrumentation key for Applicaton Insights](https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/) for more details.
 
 #### Track router changes
-a. Using react-router history object:
+To track page views, pass a history object to the init method.
     
 ```javascript
     import ReactAI from 'react-appinsights';
-    import {Router, browserHistory} from 'react-router';
+    import createHistory from "history/createBrowserHistory"
 
-    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, browserHistory);
-```
-Or
-
-b. Using Router.onUpdate:
-
-```javascript
-    var ReactAI  = require('react-appinsights');
-    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
-
-    <Router routes={routes} history={browserHistory} onUpdate={ReactAI.trackRouterChange}/>
+    const history = createHistory()
+    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, history);
 ```
 
 #### Enable React component usage tracking with a higher-order component wrapper.

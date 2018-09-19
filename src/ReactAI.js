@@ -22,10 +22,6 @@ export const ReactAI = {
         return AppInsights;
     },
 
-    trackRouterChange(){
-        AppInsights.trackPageView();
-    },
-
     setAppContext: function(properties){
         appInsights.queue.push(function () {
             appInsights.context.addTelemetryInitializer(function (envelope) {
