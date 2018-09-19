@@ -54,9 +54,7 @@ you can pass in a custom name as second argument of `withTracking`.
     export default ReactAI.withTracking(MyComponent, "CustomMyComponentName");
 ```
 
-We will measure time from ComponentDidMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time. 
-
-This means that: `Component Engaged Time = ComponentWillUnmount timestamp - ComponentDidMount timestamp - idle time`.  
+It will measure time from ComponentDidMount event through ComponentWillUnmount event. However, in order to make this time more accurate it will subtract idle time. In other words, `React Component Engaged Time = ComponentWillUnmount timestamp - ComponentDidMount timestamp - idle time`.  
 
 To see this metric in Azure portal you need to navigate to Application Insights resource, select Metrics Explorer from the top menu and configure one of the empty charts to display Custom metrics "React Component Engaged Time" grouped by Component Name. It can take up to 10 minutes for new custom metric to appear in Azure Portal.
 
