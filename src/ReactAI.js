@@ -44,8 +44,8 @@ export const ReactAI = {
         }
 
         return class extends React.Component {
-            componentWillMount(){
-                this.componentWillMountTimestamp = Date.now();
+            componentDidMount(){
+                this.componentDidMountTimestamp = Date.now();
                 this.idleTimeInMs = 0;
                 var timer = away(30000);
                 var self=this;
@@ -57,8 +57,8 @@ export const ReactAI = {
                 });
             }
             componentWillUnmount(){
-                if(!this.componentWillMountTimestamp){
-                    throw "ComponentWillMountTimestamp was not initialized. Check if super.componentWillMount() was called";
+                if(!this.componentDidMountTimestamp){
+                    throw "ComponentDidMountTimestamp was not initialized.";
                 }
                 AppInsights.trackMetric(
                     "React Component Engaged Time (seconds)",
