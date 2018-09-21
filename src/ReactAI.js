@@ -62,7 +62,7 @@ export const ReactAI = {
                 }
                 AppInsights.trackMetric(
                     "React Component Engaged Time (seconds)",
-                    (Date.now() - this.componentWillMountTimestamp - (this.idleTimeInMs ? this.idleTimeInMs : 0)) / 1000,
+                    (Date.now() - this.componentDidMountTimestamp - (this.idleTimeInMs ? this.idleTimeInMs : 0)) / 1000,
                     1,
                     null,
                     null, {
