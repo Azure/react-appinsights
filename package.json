@@ -4,9 +4,9 @@
   "description": "React Application Insights module",
   "main": "lib/index.js",
   "scripts": {
-    "build": "./node_modules/.bin/babel src --out-dir lib",
-    "prepublish": "npm run build",
-    "test": "jest"
+    "build": "node ./node_modules/babel-cli/bin/babel.js src --out-dir lib",
+    "test": "jest",
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",
@@ -24,24 +24,28 @@
   },
   "homepage": "https://github.com/anastasiia-zolochevska/react-appinsights#readme",
   "dependencies": {
-    "appinsights-usage": "^1.0.1",
-    "applicationinsights-js": "^1.0.14",
+    "appinsights-usage": "^1.0.2",
+    "applicationinsights-js": "^1.0.20",
     "away": "^1.0.0",
-    "history": "^4.2.0"
+    "history": "^4.7.2"
   },
   "devDependencies": {
-    "babel-cli": "^6.14.0",
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.14.0",
-    "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-0": "^6.5.0",
-    "enzyme": "^3.6.0",
-    "enzyme-adapter-react-15": "^1.1.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-transform-amd-to-commonjs": "^1.3.0",
+    "enzyme": "^3.7.0",
+    "enzyme-adapter-react-16": "^1.6.0",
     "jest": "^23.6.0",
-    "react": "15.6.1",
-    "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1"
+    "react": "16.5.2",
+    "react-dom": "^16.5.2",
+    "react-test-renderer": "^16.5.2",
+    "webpack": "^4.22.0",
+    "webpack-cli": "^3.1.2"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js"
