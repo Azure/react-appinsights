@@ -47,8 +47,5 @@
     "webpack": "^4.22.0",
     "webpack-cli": "^3.1.2"
   },
-  "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js"
-  },
   "typings": "./react-appinsights.d.ts"
 }
