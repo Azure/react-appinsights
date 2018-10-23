@@ -5,12 +5,12 @@ import away from 'away';
 
 
 export const ReactAI = {
-    init(appInsightsOptions, history){
+    init(appInsightsOptions, history) {
         AppInsights.downloadAndSetup(appInsightsOptions);
         AppInsightsUsage.init(appInsightsOptions);
         
-        if(history){
-            history.listen(location => {
+        if (history) {
+            history.listen(_ => {
                 AppInsights.trackPageView();
             });
         }
@@ -18,11 +18,11 @@ export const ReactAI = {
         this.setAppContext({urlReferrer:document.referrer});
     },
 
-    ai(){
+    ai() {
         return AppInsights;
     },
 
-    setAppContext(properties){
+    setAppContext(properties) {
         appInsights.queue.push(function () {
             appInsights.context.addTelemetryInitializer(function (envelope) {
                 var telemetryItem = envelope.data.baseData;
@@ -31,8 +31,7 @@ export const ReactAI = {
                 telemetryItem.properties = telemetryItem.properties || {};
                 for (var key in properties) {
                     telemetryItem.properties[key] = properties[key];
-                }
-                
+                }                
             })
         });
     },
@@ -44,7 +43,8 @@ export const ReactAI = {
         }
 
         return class extends React.Component {
-            componentDidMount(){
+
+            componentDidMount() {
                 this.componentDidMountTimestamp = Date.now();
                 this.idleTimeInMs = 0;
                 var timer = away(30000);
@@ -53,11 +53,12 @@ export const ReactAI = {
                     self.startIdleTimer = Date.now();
                 });
                 timer.on('active', function() {
-                    self.idleTimeInMs += Date.now()-self.startIdleTimer;
+                    self.idleTimeInMs += Date.now() - self.startIdleTimer;
                 });
             }
-            componentWillUnmount(){
-                if(!this.componentDidMountTimestamp){
+
+            componentWillUnmount() {
+                if(!this.componentDidMountTimestamp) {
                     throw "ComponentDidMountTimestamp was not initialized.";
                 }
                 AppInsights.trackMetric(
@@ -69,6 +70,7 @@ export const ReactAI = {
                         'Component Name': componentName
                     });
             }
+
             render() {
                 return <WrappedComponent {...this.props} />;
             }
