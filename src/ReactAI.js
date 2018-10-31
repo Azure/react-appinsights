@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 import React from 'react';
 import {AppInsights} from "applicationinsights-js"
 import AppInsightsUsage from "appinsights-usage"
