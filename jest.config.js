@@ -1,9 +1,12 @@
 'use strict';
 
-const webpackConfig = require('./webpack.config');
+const path = require('path');
 
 module.exports = {
-    moduleNameMapper: webpackConfig.resolve.alias,
+    moduleNameMapper: {
+        'applicationinsights-js': 
+            path.resolve(process.cwd(), './node_modules/applicationinsights-js/bundle/ai.module.js'),
+    },
     transformIgnorePatterns: [
         "<rootDir>/node_modules/(?!(applicationinsights-js)/)"
       ],

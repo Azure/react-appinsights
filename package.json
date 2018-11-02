@@ -2,10 +2,10 @@
   "name": "react-appinsights",
   "version": "1.0.5",
   "description": "React Application Insights module",
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "./node_modules/.bin/babel src --out-dir dist-esm/src && rollup -c && rollup -c rollup.test.config.js",
-    "clean": "rimraf dist dist-*",
+    "build": "babel src --out-dir dist-esm/src && babel test --out-dir dist-esm/test && rollup -c && rollup -c rollup.test.config.js",
+    "clean": "rimraf dist dist-* browser test-*",
     "test": "jest --watch"
   },
   "repository": "github:Azure/react-appinsights",
