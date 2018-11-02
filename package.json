@@ -4,9 +4,9 @@
   "description": "React Application Insights module",
   "main": "lib/index.js",
   "scripts": {
-    "build": "node ./node_modules/babel-cli/bin/babel.js src --out-dir lib",
-    "test": "jest --watch",
-    "webpack": "webpack"
+    "build": "./node_modules/.bin/babel src --out-dir dist-esm/src && rollup -c && rollup -c rollup.test.config.js",
+    "clean": "rimraf dist dist-*",
+    "test": "jest --watch"
   },
   "repository": "github:Azure/react-appinsights",
   "keywords": [
@@ -16,7 +16,7 @@
     "AppInsights",
     "telemetry"
   ],
-  "author": "Microsoft Corporationj",
+  "author": "Microsoft Corporation",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Azure/react-appinsights/issues"
@@ -44,8 +44,16 @@
     "react": "16.5.2",
     "react-dom": "^16.5.2",
     "react-test-renderer": "^16.5.2",
-    "webpack": "^4.22.0",
-    "webpack-cli": "^3.1.2"
+    "rimraf": "^2.6.2",
+    "rollup": "^0.66.6",
+    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-multi-entry": "^2.0.2",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup-plugin-replace": "^2.1.0",
+    "rollup-plugin-terser": "^3.0.0",
+    "rollup-plugin-uglify": "^6.0.0",
+    "rollup-plugin-visualizer": "^0.9.2"
   },
   "typings": "./react-appinsights.d.ts"
 }
