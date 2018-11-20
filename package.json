@@ -1,7 +1,7 @@
 {
   "name": "react-appinsights",
   "version": "1.0.5",
-  "description": "React Application Insights module",
+  "description": "Application Insights module for React applications",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src --out-dir dist-esm/src && babel test --out-dir dist-esm/test && rollup -c && rollup -c rollup.test.config.js",
