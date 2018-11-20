@@ -6,7 +6,8 @@
   "scripts": {
     "build": "babel src --out-dir dist-esm/src && babel test --out-dir dist-esm/test && rollup -c && rollup -c rollup.test.config.js",
     "clean": "rimraf dist dist-* browser test-*",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "prepack": "npm install && npm run build"
   },
   "repository": "github:Azure/react-appinsights",
   "keywords": [
