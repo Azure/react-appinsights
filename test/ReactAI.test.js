@@ -52,9 +52,7 @@ describe('Tracked component', () => {
         mountedComponent.unmount();
         expect(AppInsights.trackMetric.mock.calls.length).toEqual(1);
         expect(AppInsights.trackMetric.mock.calls[0][0]).toEqual('React Component Engaged Time (seconds)')
-        expect(AppInsights.trackMetric.mock.calls[0][1]).not.toBe(0);
-        expect(AppInsights.trackMetric.mock.calls[0][1]).toBeLessThan(1);
-        expect(AppInsights.trackMetric.mock.calls[0][1]).toBeLessThan(1);
+        expect(AppInsights.trackMetric.mock.calls[0][1]).toBeLessThan(2);
         expect(AppInsights.trackMetric.mock.calls[0][2]).toEqual(1);
         expect(AppInsights.trackMetric.mock.calls[0][3]).toBeNull();
         expect(AppInsights.trackMetric.mock.calls[0][4]).toBeNull();
