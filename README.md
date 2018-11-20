@@ -1,5 +1,8 @@
 # react-appinsights
 
+[![Build Status](https://travis-ci.org/Azure/react-appinsights.svg?branch=master)](https://travis-ci.org/Azure/react-appinsights)
+[![npm version](https://badge.fury.io/js/react-appinsights.svg)](https://badge.fury.io/js/react-appinsights)
+
 Javascript module to include [Application Insights][appinsights-js] in applications built with [React][react].  
 It extends Application Insights with additional React-specific features:
  * tracking of router changes
@@ -10,7 +13,7 @@ It extends Application Insights with additional React-specific features:
 
 With npm:
 ```bash
-npm install react-appinsights --save
+npm install --save react-appinsights
 ```
 
 ## Usage
@@ -19,8 +22,8 @@ To initialize Application Insights add the following to the entry point
 file of your application (e.g. index.js):
 
 ```javascript
-    import ReactAI from 'react-appinsights';
-    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
+import ReactAI from 'react-appinsights';
+ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'});
 ```
 See [this Application Insights tutorial for Node.js][appinsights-nodejs] 
 for more details on how to obtain the instrumentation key.
@@ -30,11 +33,11 @@ for more details on how to obtain the instrumentation key.
 To track page views, pass a history object to the init method.
     
 ```javascript
-    import ReactAI from 'react-appinsights';
-    import createHistory from 'history/createBrowserHistory'
+import ReactAI from 'react-appinsights';
+import createHistory from 'history/createBrowserHistory'
 
-    const history = createHistory()
-    ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, history);
+const history = createHistory()
+ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, history);
 ```
 
 #### Enable React components usage tracking
@@ -43,13 +46,13 @@ To enable React components usage tracking, apply the `withTracking` higher-order
 component function.
 
 ```javascript
-    import ReactAI from 'react-appinsights';
+import ReactAI from 'react-appinsights';
 
-    class MyComponent extends React.Component {
-        ... 
-    }
+class MyComponent extends React.Component {
+    ... 
+}
 
-    export default ReactAI.withTracking(MyComponent);
+export default ReactAI.withTracking(MyComponent);
 ```
 
 If, for any reason, you want to change the name string of the component 
@@ -57,7 +60,7 @@ that appears in Application Insights,
 you can pass in a custom name as second argument of `withTracking`.
 
 ```javascript
-    export default ReactAI.withTracking(MyComponent, "CustomMyComponentName");
+export default ReactAI.withTracking(MyComponent, "CustomMyComponentName");
 ```
 
 It will measure time from the `ComponentDidMount` event through the `ComponentWillUnmount` event. 
@@ -77,7 +80,7 @@ It can take up to 10 minutes for new custom metric to appear in Azure Portal.
 To augment all telemetry with additional properties use `setAppContext` method. For instance:
 
 ```javascript
-    ReactAI.setAppContext({urlReferrer: document.referrer});
+ReactAI.setAppContext({urlReferrer: document.referrer});
 ```
 
 This will add urlReferrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
@@ -89,7 +92,7 @@ This will add urlReferrer property to all page views, ajax calls, exceptions and
 Use the following method to get the original AppInsights object:
 
 ```javascript
-    var appInsights = ReactAI.ai();
+var appInsights = ReactAI.ai();
 ```
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights. 
