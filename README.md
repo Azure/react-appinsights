@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/Azure/react-appinsights.svg?branch=master)](https://travis-ci.org/Azure/react-appinsights)
 [![npm](https://img.shields.io/npm/v/react-appinsights.svg)](https://www.npmjs.com/package/react-appinsights)
 [![Downloads per month](https://img.shields.io/npm/dm/react-appinsights.svg)](https://www.npmjs.com/package/react-appinsights)
+[![dependencies](https://david-dm.org/Azure/react-appinsights.svg)](https://david-dm.org/Azure/react-appinsights)
 [![Greenkeeper badge](https://badges.greenkeeper.io/Azure/react-appinsights.svg)](https://greenkeeper.io/)
 
 Javascript module to include [Application Insights][appinsights-js] in applications built with [React][react].  
