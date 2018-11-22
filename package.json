@@ -7,8 +7,13 @@
     "build": "babel src --out-dir dist-esm/src && babel test --out-dir dist-esm/test && rollup -c && rollup -c rollup.test.config.js",
     "clean": "rimraf dist dist-* browser test-*",
     "test": "jest",
-    "prepack": "npm install && npm run build"
+    "prepack": "npm install && npm run build",
+    "prettier": "prettier --write \"{src,test}/**/*.js\""
   },
+  "pre-commit": [
+    "prettier",
+    "test"
+  ],
   "repository": "github:Azure/react-appinsights",
   "keywords": [
     "Azure",
@@ -42,6 +47,8 @@
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.6.0",
     "jest": "^23.6.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.15.2",
     "react": "16.5.2",
     "react-dom": "^16.5.2",
     "react-test-renderer": "^16.5.2",
