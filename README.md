@@ -1,7 +1,7 @@
 # react-appinsights
 
 [![Build Status](https://travis-ci.org/Azure/react-appinsights.svg?branch=master)](https://travis-ci.org/Azure/react-appinsights)
-[![npm version](https://badge.fury.io/js/react-appinsights.svg)](https://badge.fury.io/js/react-appinsights)
+[![npm version](https://badge.fury.io/js/react-appinsights.svg)](https://badge.fury.io/js/react-appinsights) [![Greenkeeper badge](https://badges.greenkeeper.io/Azure/react-appinsights.svg)](https://greenkeeper.io/)
 
 Javascript module to include [Application Insights][appinsights-js] in applications built with [React][react].  
 It extends Application Insights with additional React-specific features:
