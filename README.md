@@ -1,6 +1,6 @@
 # react-appinsights
 
-[![Build Status](https://travis-ci.org/Azure/react-appinsights.svg?branch=master)](https://travis-ci.org/Azure/react-appinsights)
+[![Build Status](https://dev.azure.com/azure-public/react-appinsights/_apis/build/status/Azure.react-appinsights)](https://dev.azure.com/azure-public/react-appinsights/_build/latest?definitionId=16)
 [![npm](https://img.shields.io/npm/v/react-appinsights.svg)](https://www.npmjs.com/package/react-appinsights)
 [![Downloads per month](https://img.shields.io/npm/dm/react-appinsights.svg)](https://www.npmjs.com/package/react-appinsights)
 [![dependencies](https://david-dm.org/Azure/react-appinsights.svg)](https://david-dm.org/Azure/react-appinsights)
