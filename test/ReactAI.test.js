@@ -7,7 +7,7 @@ import { mount } from 'enzyme';
 
 import { AppInsights } from 'applicationinsights-js';
 
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createBrowserHistory';
 
 const INNER_TEXT = Math.random()
   .toString(36)
@@ -61,11 +61,11 @@ describe('Tracked component', () => {
   });
 
   it('tracks page views', () => {
-    const history = createHistory()
+    const history = createHistory();
     ReactAI.init(INIT_SETTINGS, history);
 
-    history.push("/home", { some: "state" });
-    history.push("/new-fancy-page");
+    history.push('/home', { some: 'state' });
+    history.push('/new-fancy-page');
     expect(AppInsights.trackPageView.mock.calls.length).toEqual(2);
-  })
+  });
 });
