@@ -7,6 +7,8 @@ import { mount } from 'enzyme';
 
 import { AppInsights } from 'applicationinsights-js';
 
+import createHistory from 'history/createBrowserHistory'
+
 const INNER_TEXT = Math.random()
   .toString(36)
   .substring(7);
@@ -25,6 +27,7 @@ describe('Tracked component', () => {
     jest.mock('applicationinsights-js');
     appInsights.downloadAndSetup = jest.fn();
     appInsights.trackMetric = jest.fn();
+    appInsights.trackPageView = jest.fn();
   });
 
   it('renders correctly', () => {
@@ -56,4 +59,13 @@ describe('Tracked component', () => {
     expect(AppInsights.trackMetric.mock.calls[0][4]).toBeNull();
     expect(JSON.stringify(AppInsights.trackMetric.mock.calls[0][5])).toEqual('{"Component Name":"TestComponent"}');
   });
+
+  it('tracks page views', () => {
+    const history = createHistory()
+    ReactAI.init(INIT_SETTINGS, history);
+
+    history.push("/home", { some: "state" });
+    history.push("/new-fancy-page");
+    expect(AppInsights.trackPageView.mock.calls.length).toEqual(2);
+  })
 });

@@ -33,14 +33,24 @@ for more details on how to obtain the instrumentation key.
 
 #### Track router changes
 
-To track page views, pass a history object to the init method.
+To track page views, pass a history object to the init method.  
+For more information see the [documentation][react-router] of the `react-router` package.
+
     
 ```javascript
 import ReactAI from 'react-appinsights';
-import createHistory from 'history/createBrowserHistory'
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 
-const history = createHistory()
+const history = createBrowserHistory()
 ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, history);
+
+ReactDOM.render(
+  <Router history={history}>
+    <App />
+  </Router>,
+  document.getElementById("root")
+);
 ```
 
 #### Enable React components usage tracking
@@ -105,3 +115,4 @@ Refer to [this doc][appinsights-js-api] for information on the Javascript API of
  [appinsights-js]: https://docs.microsoft.com/en-us/azure/application-insights/app-insights-javascript
  [appinsights-nodejs]: https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/
  [appinsights-js-api]: https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md
+ [react-router]: https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components

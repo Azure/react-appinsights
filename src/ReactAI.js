@@ -12,7 +12,7 @@ export const ReactAI = {
     AppInsightsUsage.init(appInsightsOptions);
 
     if (history) {
-      history.listen(_ => {
+      history.listen((_location, _action) => {
         AppInsights.trackPageView();
       });
     }
