@@ -25,10 +25,10 @@ export const ReactAI = {
   },
 
   setAppContext(properties) {
-    appInsights.queue.push(function() {
-      appInsights.context.addTelemetryInitializer(function(envelope) {
+    AppInsights.queue = AppInsights.queue || [];
+    AppInsights.queue.push(function() {
+      AppInsights.context.addTelemetryInitializer(function(envelope) {
         var telemetryItem = envelope.data.baseData;
-
         // To set custom properties:
         telemetryItem.properties = telemetryItem.properties || {};
         for (var key in properties) {

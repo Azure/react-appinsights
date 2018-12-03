@@ -28,6 +28,10 @@ describe('Tracked component', () => {
     appInsights.downloadAndSetup = jest.fn();
     appInsights.trackMetric = jest.fn();
     appInsights.trackPageView = jest.fn();
+    appInsights.trackEvent = jest.fn();
+    appInsights.trackTrace = jest.fn();
+    appInsights.trackDependency = jest.fn();
+    appInsights.setAppContext = jest.fn();
   });
 
   it('renders correctly', () => {
@@ -67,5 +71,29 @@ describe('Tracked component', () => {
     history.push('/home', { some: 'state' });
     history.push('/new-fancy-page');
     expect(AppInsights.trackPageView.mock.calls.length).toEqual(2);
+  });
+
+  it('initializes queue to set appContext', () => {
+    ReactAI.init(INIT_SETTINGS);
+    var initialQueueLength = AppInsights.queue.length; // Anything from the default {urlReferrer: document.referrer} appContext
+
+    let testContext = {
+      prop1text: 'value1',
+      prop2number: 100,
+      prop3boolean: true,
+    };
+
+    ReactAI.setAppContext(testContext);
+
+    AppInsights.trackTrace('Test trace', { prop: 'value' });
+    AppInsights.trackDependency('test', 'get', 'https://test/', '/test', 100, true, 200);
+    AppInsights.trackEvent('test');
+
+    expect(AppInsights.queue.length).toEqual(initialQueueLength + 1);
+    expect(AppInsights.trackTrace.mock.calls.length).toEqual(1);
+    expect(AppInsights.trackDependency.mock.calls.length).toEqual(1);
+    expect(AppInsights.trackEvent.mock.calls.length).toEqual(1);
+
+    // Ideally, we'd have a way to test the props of the telemetry items to be { ...testContext, suppliedProps } but that requires a lot of refactor
   });
 });
