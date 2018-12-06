@@ -9,7 +9,7 @@ declare module "react-appinsights" {
     interface ReactAppInsights {
         init(
             appInsightsOptions: Microsoft.ApplicationInsights.IConfig,
-            history: History
+            history?: History
         ): void;
 
         ai(): Microsoft.ApplicationInsights.IAppInsights;
