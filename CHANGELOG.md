@@ -5,11 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
-## [2.0.1] - 2018-10-12
+## [2.0.1] - 2018-12-10
 
 ### Fixed
 
-- Fix `setAppContext` null issue on AI.queue (#22) (thanks to @hiraldesai)
+- Fix `setAppContext` null issue on AI.queue #22 (thanks to @hiraldesai)
 - Make history `init` parameter optional in the Typescript typings (thanks to @milohansen)
 - Bump `merge` indirect dependency to mitigate security vulnerability [772](https://www.npmjs.com/advisories/722)
 
