@@ -22,19 +22,21 @@ class TestComponent extends React.Component {
   }
 }
 
-describe('Tracked component', () => {
-  beforeEach(() => {
-    jest.mock('applicationinsights-js');
-    appInsights.downloadAndSetup = jest.fn();
-    appInsights.trackMetric = jest.fn();
-    appInsights.trackPageView = jest.fn();
-    appInsights.trackEvent = jest.fn();
-    appInsights.trackTrace = jest.fn();
-    appInsights.trackDependency = jest.fn();
-    appInsights.setAppContext = jest.fn();
+jest.mock('applicationinsights-js');
+
+describe('ReactAI', () => {
+  beforeAll(() => {
+    // mock all functions of AppInsights
+    for (const key of Object.keys(AppInsights)) {
+      if (key != 'queue') AppInsights[key] = jest.fn();
+    }
   });
 
-  it('renders correctly', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renders a tracked component correctly', () => {
     ReactAI.init(INIT_SETTINGS);
     let TestComponentWithTracking = ReactAI.withTracking(TestComponent);
 
@@ -45,23 +47,25 @@ describe('Tracked component', () => {
     // TODO test that it's unmounted?
   });
 
-  it('sends tracked metrics back to AppInsights', () => {
+  it('sends metrics of the tracked component back to AppInsights', () => {
     ReactAI.init(INIT_SETTINGS);
-    expect(AppInsights.downloadAndSetup.mock.calls.length).toEqual(2);
-    expect(AppInsights.downloadAndSetup.mock.calls[0]).toEqual([INIT_SETTINGS]);
+    expect(AppInsights.downloadAndSetup).toHaveBeenCalledTimes(2);
+    expect(AppInsights.downloadAndSetup).toHaveBeenCalledWith(INIT_SETTINGS);
 
     let TestComponentWithTracking = ReactAI.withTracking(TestComponent);
     const mountedComponent = mount(<TestComponentWithTracking />);
-    expect(AppInsights.trackMetric.mock.calls.length).toEqual(0);
+    expect(AppInsights.trackMetric).toHaveBeenCalledTimes(0);
 
     mountedComponent.unmount();
-    expect(AppInsights.trackMetric.mock.calls.length).toEqual(1);
-    expect(AppInsights.trackMetric.mock.calls[0][0]).toEqual('React Component Engaged Time (seconds)');
-    expect(AppInsights.trackMetric.mock.calls[0][1]).toBeLessThan(2);
-    expect(AppInsights.trackMetric.mock.calls[0][2]).toEqual(1);
-    expect(AppInsights.trackMetric.mock.calls[0][3]).toBeNull();
-    expect(AppInsights.trackMetric.mock.calls[0][4]).toBeNull();
-    expect(JSON.stringify(AppInsights.trackMetric.mock.calls[0][5])).toEqual('{"Component Name":"TestComponent"}');
+    expect(AppInsights.trackMetric).toHaveBeenCalledTimes(1);
+    expect(AppInsights.trackMetric).toHaveBeenCalledWith(
+      'React Component Engaged Time (seconds)',
+      expect.any(Number),
+      1,
+      null,
+      null,
+      { 'Component Name': 'TestComponent' },
+    );
   });
 
   it('tracks page views', () => {
@@ -70,7 +74,7 @@ describe('Tracked component', () => {
 
     history.push('/home', { some: 'state' });
     history.push('/new-fancy-page');
-    expect(AppInsights.trackPageView.mock.calls.length).toEqual(2);
+    expect(AppInsights.trackPageView).toHaveBeenCalledTimes(2);
   });
 
   it('initializes queue to set appContext', () => {
@@ -90,10 +94,9 @@ describe('Tracked component', () => {
     AppInsights.trackEvent('test');
 
     expect(AppInsights.queue.length).toEqual(initialQueueLength + 1);
-    expect(AppInsights.trackTrace.mock.calls.length).toEqual(1);
-    expect(AppInsights.trackDependency.mock.calls.length).toEqual(1);
-    expect(AppInsights.trackEvent.mock.calls.length).toEqual(1);
-
-    // Ideally, we'd have a way to test the props of the telemetry items to be { ...testContext, suppliedProps } but that requires a lot of refactor
+    expect(AppInsights.trackTrace).toHaveBeenCalledTimes(1);
+    expect(AppInsights.trackDependency).toHaveBeenCalledTimes(1);
+    expect(AppInsights.trackEvent).toHaveBeenCalledTimes(1);
+    // TODO Ideally, we'd have a way to test the props of the telemetry items to be { ...testContext, suppliedProps } but that requires a lot of refactor
   });
 });
