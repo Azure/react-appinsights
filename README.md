@@ -43,7 +43,7 @@ import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory()
-ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'}, history);
+ReactAI.init({instrumentationKey:'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx', history: history});
 
 ReactDOM.render(
   <Router history={history}>
@@ -53,59 +53,34 @@ ReactDOM.render(
 );
 ```
 
-#### Enable React components usage tracking
-
-To enable React components usage tracking, apply the `withTracking` higher-order 
-component function.
-
-```javascript
-import ReactAI from 'react-appinsights';
-
-class MyComponent extends React.Component {
-    ... 
-}
-
-export default ReactAI.withTracking(MyComponent);
-```
-
-If, for any reason, you want to change the name string of the component 
-that appears in Application Insights, 
-you can pass in a custom name as second argument of `withTracking`.
-
-```javascript
-export default ReactAI.withTracking(MyComponent, "CustomMyComponentName");
-```
-
-It will measure time from the `ComponentDidMount` event through the `ComponentWillUnmount` event. 
-However, in order to make this time more accurate it will subtract idle time. 
-In other words, `React Component Engaged Time = ComponentWillUnmount timestamp - ComponentDidMount timestamp - idle time`.  
-
-To see this metric in Azure portal you need to navigate to Application Insights resource, 
-select Metrics Explorer from the top menu 
-and configure one of the empty charts to display Custom metrics "React Component Engaged Time" 
-grouped by Component Name. 
-It can take up to 10 minutes for new custom metric to appear in Azure Portal.
-
-<img width="550" src="https://cloud.githubusercontent.com/assets/3801171/18735093/eeac0496-802f-11e6-9403-50c6fe8aaf9e.png"/>
-
 #### Set application context
 
-To augment all telemetry with additional properties use `setAppContext` method. For instance:
+To augment all telemetry with additional properties use `setContext` method. For instance:
 
 ```javascript
-ReactAI.setAppContext({urlReferrer: document.referrer});
+ReactAI.setContext({CorrelationId: 'some-unique-correlation-id', Referrer: document.referrer});
 ```
 
-This will add urlReferrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
+This will add CorrelationId and Referrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights:
 
 <img width="600" src="https://cloud.githubusercontent.com/assets/3801171/18721651/43c4861e-7fe6-11e6-8541-3614111acc8f.png"/>
 
-#### Get AppInsights object
+#### Get original AppInsights object
 
 Use the following method to get the original AppInsights object:
 
 ```javascript
-var appInsights = ReactAI.ai();
+var appInsights = ReactAI.RootInstance;
+```
+
+#### The initialization settings has following properties available
+```typescript
+interface IReactAISettings {
+  instrumentationKey: string;   // Required - get it from Azure Portal
+  initialContext?: { [key: string]: any };  // If you want to initialize with custom context
+  history?: History;    // React router history - if supplied, it enables page view tracking
+  debug?: boolean;  // Debug mode: useful when debugging to see messages from the library displayed on the console
+}
 ```
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights. 
