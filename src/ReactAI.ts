@@ -1,5 +1,5 @@
 import { ApplicationInsights, ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { History } from 'history';
+import { Action, History, Location } from 'history';
 import { IReactAISettings } from '.';
 
 export default class ReactAI {
@@ -67,12 +67,14 @@ export default class ReactAI {
   }
 
   private static addHistoryListener(history: History): void {
-    history.listen((location, action) => {
-      this.ai.trackPageView({});
-      if (this.debug) {
-        console.log('ReactAI: Recording page view', location, action);
-      }
-    });
+    history.listen(
+      (location: Location, action: Action): void => {
+        this.ai.trackPageView({});
+        if (this.debug) {
+          console.log('ReactAI: Recording page view', location, action);
+        }
+      },
+    );
   }
 
   private constructor() {
