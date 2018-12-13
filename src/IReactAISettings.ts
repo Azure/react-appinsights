@@ -1,4 +1,4 @@
-import { History } from 'history';
+import { History } from "history";
 export default interface IReactAISettings {
   instrumentationKey: string;
   initialContext?: { [key: string]: any };

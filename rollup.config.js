@@ -1,3 +1,3 @@
-import * as base from './rollup.base.config';
+import * as base from "./rollup.base.config";
 
 export default [base.nodeConfig(), base.browserConfig()];
