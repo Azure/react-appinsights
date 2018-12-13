@@ -5,10 +5,9 @@
   "main": "dist/index.js",
   "module": "dist-esm/src/index.js",
   "browser": {
-    "./dist/index.js": "./browser/index.js",
-    "./dist-esm/src/print.js": "./dist-esm/src/print.browser.js"
+    "./dist/index.js": "./browser/index.js"
   },
-  "types": "dist-esm/index.d.ts",
+  "types": "dist-esm/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist dist-*",
     "build": "tsc -p . && rollup -c && rollup -c rollup.test.config.js",
@@ -21,9 +20,6 @@
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags"
   },
-  "files": [
-    "lib/**/*"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Azure/react-appinsights.git"
@@ -42,6 +38,9 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Azure/react-appinsights/issues"
+  },
+  "engine": {
+    "node": ">=8.0.0"
   },
   "homepage": "https://github.com/Azure/react-appinsights#readme",
   "devDependencies": {
