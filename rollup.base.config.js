@@ -85,7 +85,7 @@ export function browserConfig(test = false) {
             'LoggingSeverity',
             '_InternalMessageId',
             'CoreUtils',
-            'DiagnosticLogger'
+            'DiagnosticLogger',
           ],
         },
       }),
