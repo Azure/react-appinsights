@@ -58,5 +58,5 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "test"],
-  "exclude": ["legacy"]
+  "exclude": ["legacy", "node_modules"]
 }
