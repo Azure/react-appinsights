@@ -3,6 +3,12 @@
 All notable changes to this project are documented in this file.  
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] beta branch
+
+### Change
+ - rewrite in Typescript
+ - support for Application Insights Javascript SDK
+
 ## [Unreleased]
 
 ## [2.0.1] - 2018-12-10
@@ -41,3 +47,4 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 [unreleased]: https://github.com/Azure/react-appinsights/compare/v2.0.1...HEAD
 [2.0.0]: https://github.com/Azure/react-appinsights/compare/v1.0.4...v2.0.0
 [2.0.1]: https://github.com/Azure/react-appinsights/compare/v2.0.0...v2.0.1
+[3.0.0]: https://github.com/Azure/react-appinsights/compare/v2.0.1...typescript-rewrite
