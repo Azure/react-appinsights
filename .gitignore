@@ -59,3 +59,11 @@ typings/
 
 # next.js build output
 .next
+
+# built output
+dist
+dist-*
+test-dist
+test-dist*
+browser
+test-browser
