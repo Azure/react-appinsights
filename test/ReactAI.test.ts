@@ -1,4 +1,4 @@
-import { ReactAI } from '..';
+import { ReactAI } from '../src';
 
 describe('ReactAI ->', () => {
   test('Initializes correctly', () => {
