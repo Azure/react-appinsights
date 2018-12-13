@@ -6,7 +6,6 @@ import { ReactAI } from "../src";
 describe("ReactAI ->", () => {
   test("Initializes correctly", () => {
     ReactAI.initialize({ instrumentationKey: "my-i-key" });
-    expect(ReactAI.Instance).not.toBe(null);
     expect(ReactAI.RootInstance).not.toBe(undefined);
     expect(ReactAI.RootInstance.config.instrumentationKey).toBe("my-i-key");
   });

@@ -5,7 +5,20 @@ import { ApplicationInsights, ITelemetryItem } from "@microsoft/applicationinsig
 import { Action, History, Location } from "history";
 import { IReactAISettings } from ".";
 
+/**
+ * Module to include Microsoft Application Insights in React applications
+ *
+ * @export
+ * @class ReactAI
+ */
 export default class ReactAI {
+  /**
+   * Initializaes a singleton instance of ReactAI based on supplied parameters
+   *
+   * @static
+   * @param {IReactAISettings} settings
+   * @memberof ReactAI
+   */
   public static initialize(settings: IReactAISettings): void {
     this.debug = settings.debug;
     if (!this.ai) {
@@ -22,18 +35,40 @@ export default class ReactAI {
     }
   }
 
-  public static get Instance(): ReactAI {
-    return this.instance;
-  }
-
+  /**
+   * Underlying root instance of Application Insights
+   *
+   * @readonly
+   * @static
+   * @type {ApplicationInsights}
+   * @memberof ReactAI
+   */
   public static get RootInstance(): ApplicationInsights {
     return this.ai;
   }
 
+
+  /**
+   * Current value of context/custom dimensions
+   *
+   * @readonly
+   * @static
+   * @type {{ [key: string]: any }}
+   * @memberof ReactAI
+   */
   public static get Context(): { [key: string]: any } {
     return this.contextProps || {};
   }
 
+  
+  /**
+   * Set custom context/custom dimensions for Application Insights
+   *
+   * @static
+   * @param {{ [key: string]: any }} properties - custom properties to add to all outbound Application Insights telemetry
+   * @param {boolean} [clearPrevious=false] - if false(default) multiple calls to setContext will append to/overwrite existing custom dimensions, if true the values are reset
+   * @memberof ReactAI
+   */
   public static setContext(properties: { [key: string]: any }, clearPrevious: boolean = false): void {
     if (clearPrevious) {
       this.contextProps = {};
