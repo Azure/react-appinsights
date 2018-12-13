@@ -1,4 +1,4 @@
-import IReactAISettings from './IReactAISettings';
-import ReactAI from './ReactAI';
+import IReactAISettings from "./IReactAISettings";
+import ReactAI from "./ReactAI";
 
 export { ReactAI, IReactAISettings };

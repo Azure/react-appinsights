@@ -1,6 +1,6 @@
-import { ApplicationInsights, ITelemetryItem } from '@microsoft/applicationinsights-web';
-import { Action, History, Location } from 'history';
-import { IReactAISettings } from '.';
+import { ApplicationInsights, ITelemetryItem } from "@microsoft/applicationinsights-web";
+import { Action, History, Location } from "history";
+import { IReactAISettings } from ".";
 
 export default class ReactAI {
   public static initialize(settings: IReactAISettings): void {
@@ -9,7 +9,7 @@ export default class ReactAI {
       this.ai = new ApplicationInsights({ config: { instrumentationKey: settings.instrumentationKey }, queue: [] });
       this.ai.loadAppInsights();
       if (this.debug) {
-        console.log('ReactAI: Application Insights initialized with:', settings);
+        console.log("ReactAI: Application Insights initialized with:", settings);
       }
     }
     this.setContext(settings.initialContext || {}, true);
@@ -35,7 +35,7 @@ export default class ReactAI {
     if (clearPrevious) {
       this.contextProps = {};
       if (this.debug) {
-        console.log('Context reset.');
+        console.log("Context reset.");
       }
     }
     properties = properties || {};
@@ -45,7 +45,7 @@ export default class ReactAI {
       }
     }
     if (this.debug) {
-      console.log('Context set to:', this.contextProps);
+      console.log("Context set to:", this.contextProps);
     }
   }
 
@@ -71,15 +71,15 @@ export default class ReactAI {
       (location: Location, action: Action): void => {
         this.ai.trackPageView({});
         if (this.debug) {
-          console.log('ReactAI: Recording page view', location, action);
+          console.log("ReactAI: Recording page view", location, action);
         }
-      },
+      }
     );
   }
 
   private constructor() {
     if (ReactAI.instance) {
-      throw new Error('ReactAI: use ReactAI.Instance() instead.');
+      throw new Error("ReactAI: use ReactAI.Instance() instead.");
     }
     ReactAI.instance = this;
   }
