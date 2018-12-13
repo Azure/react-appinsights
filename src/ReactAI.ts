@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 import { ApplicationInsights, ITelemetryItem } from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
 import { IReactAISettings } from ".";
