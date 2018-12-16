@@ -56,7 +56,7 @@
     "react-dom": "^16.5.2",
     "react-test-renderer": "^16.5.2",
     "rimraf": "^2.6.2",
-    "rollup": "^0.67.3",
+    "rollup": "^0.68.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-node-builtins": "^2.1.2",
