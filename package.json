@@ -54,7 +54,7 @@
     "pretty-quick": "^1.8.0",
     "react": "16.7.0",
     "react-dom": "^16.7.0",
-    "react-test-renderer": "^16.5.2",
+    "react-test-renderer": "^16.7.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.68.0",
     "rollup-plugin-commonjs": "^9.2.0",
