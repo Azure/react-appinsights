@@ -86,7 +86,9 @@ export function browserConfig(test = false) {
             "_InternalMessageId",
             "CoreUtils",
             "DiagnosticLogger"
-          ]
+          ],
+          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement'],
+          'node_modules/react-dom/index.js': ['render']    
         }
       }),
       nodeBuiltins(),

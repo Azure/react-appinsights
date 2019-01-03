@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ApplicationInsights, ITelemetryItem } from "@microsoft/applicationinsights-web";
+import { ApplicationInsights, IConfig, IConfiguration, ITelemetryItem } from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
 import { IReactAISettings } from ".";
 
@@ -19,7 +19,7 @@ export default class ReactAI {
    * @param {IReactAISettings} settings
    * @memberof ReactAI
    */
-  public static initialize(settings: IReactAISettings): void {
+  public static initialize(settings: IReactAISettings & IConfiguration & IConfig): void {
     this.debug = settings.debug;
     if (!this.ai) {
       this.ai = new ApplicationInsights({ config: { instrumentationKey: settings.instrumentationKey }, queue: [] });
@@ -36,7 +36,7 @@ export default class ReactAI {
   }
 
   /**
-   * Underlying root instance of Application Insights
+   * Returns underlying root instance of Application Insights
    *
    * @readonly
    * @static
@@ -47,9 +47,8 @@ export default class ReactAI {
     return this.ai;
   }
 
-
   /**
-   * Current value of context/custom dimensions
+   * Returns current value of context/custom dimensions
    *
    * @readonly
    * @static
@@ -60,7 +59,19 @@ export default class ReactAI {
     return this.contextProps || {};
   }
 
-  
+
+  /**
+   * Returns if ReactAI is in debug mode
+   *
+   * @readonly
+   * @static
+   * @type {boolean}
+   * @memberof ReactAI
+   */
+  public static get IsDebugMode(): boolean {
+    return this.debug ? true : false;
+  }
+
   /**
    * Set custom context/custom dimensions for Application Insights
    *

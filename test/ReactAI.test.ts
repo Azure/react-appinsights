@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ReactAI } from "../src";
+import ReactAI from "../src/ReactAI";
 
 describe("ReactAI ->", () => {
   test("Initializes correctly", () => {
