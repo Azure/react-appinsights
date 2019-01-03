@@ -11,13 +11,6 @@ import { History } from "history";
  */
 export default interface IReactAISettings {
   /**
-   * Application Insights Instrumentation Key
-   *
-   * @type {string}
-   * @memberof IReactAISettings
-   */
-  instrumentationKey: string;
-  /**
    * Context/custom dimensions for initialization
    * You can also do this post initialization using ReactAI.setContext()
    *

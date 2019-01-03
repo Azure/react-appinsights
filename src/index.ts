@@ -3,5 +3,6 @@
 
 import IReactAISettings from "./IReactAISettings";
 import ReactAI from "./ReactAI";
+import reactAiWithTracking from "./reactAIWithTracking";
 
-export { ReactAI, IReactAISettings };
+export { ReactAI, IReactAISettings, reactAiWithTracking };
