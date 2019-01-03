@@ -22,7 +22,7 @@ export default class ReactAI {
   public static initialize(settings: IReactAISettings & IConfiguration & IConfig): void {
     this.debug = settings.debug;
     if (!this.ai) {
-      this.ai = new ApplicationInsights({ config: { instrumentationKey: settings.instrumentationKey }, queue: [] });
+      this.ai = new ApplicationInsights({ config: settings, queue: [] });
       this.ai.loadAppInsights();
       if (this.debug) {
         console.log("ReactAI: Application Insights initialized with:", settings);
@@ -58,7 +58,6 @@ export default class ReactAI {
   public static get Context(): { [key: string]: any } {
     return this.contextProps || {};
   }
-
 
   /**
    * Returns if ReactAI is in debug mode
