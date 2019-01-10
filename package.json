@@ -12,6 +12,7 @@
     "clean": "rimraf dist dist-*",
     "build": "tsc -p . && rollup -c && rollup -c rollup.test.config.js",
     "test": "jest --config jestconfig.json",
+    "test-watch": "jest --config jestconfig.json --watch",
     "pretest": "npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
@@ -55,6 +56,7 @@
     "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.6.0",
     "prettier": "^1.15.3",
+    "react-dom": "^16.7.0",
     "rimraf": "^2.6.2",
     "rollup": "^1.0.0",
     "rollup-plugin-commonjs": "^9.2.0",
@@ -76,7 +78,6 @@
   "dependencies": {
     "@microsoft/applicationinsights-web": "^1.0.0-beta.10",
     "history": "^4.7.2",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0"
+    "react": "^16.7.0"
   }
 }
