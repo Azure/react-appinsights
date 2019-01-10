@@ -39,7 +39,7 @@ export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React
         throw new Error("reactAIWithTracking:componentWillUnmount: mountTimestamp isn't initialized.");
       }
 
-      if (!ReactAI.RootInstance) {
+      if (!ReactAI.rootInstance) {
         throw new Error("reactAIWithTracking:componentWillUnmount: ReactAI isn't initialized yet.");
       }
 
@@ -64,7 +64,7 @@ export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React
         "componentWillUnmount",
         `Tracking ${engagementTime} seconds of engagement time for ${this.componentName}.`
       );
-      ReactAI.RootInstance.trackMetric(metricData, additionalProperties);
+      ReactAI.rootInstance.trackMetric(metricData, additionalProperties);
     }
 
     public render() {
@@ -96,7 +96,7 @@ export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React
     };
 
     private logIfEnabled = (from: string, message: string) => {
-      if (ReactAI.IsDebugMode) {
+      if (ReactAI.isDebugMode) {
         console.log(`reactAIWithTracking:${this.componentName}:${from}: ${message}`, {
           engagementTime: this.getEngagementTimeSeconds(),
           firstActiveTime: this.firstActiveTime,
