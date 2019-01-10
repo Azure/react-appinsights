@@ -10,6 +10,11 @@ describe("ReactAI ->", () => {
     expect(ReactAI.RootInstance.config.instrumentationKey).toBe("my-i-key");
   });
 
+  test("Sets debug mode as expected", () => {
+    ReactAI.initialize({ instrumentationKey: "my-i-key", debug: true });
+    expect(ReactAI.IsDebugMode).toBe(true);
+  });
+
   test("Sets context correctly", () => {
     ReactAI.initialize({ instrumentationKey: "my-i-key" });
     ReactAI.setContext({ prop1: "value1", prop2: "value2" });
