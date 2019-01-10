@@ -24,7 +24,7 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
       expect(() => {
         const component = trackedTestComponentWrapper();
         component.unmount();
-      }).toThrowError(/ReactAI isn't initialized yet/);
+      }).toThrowError("ReactAI isn't initialized yet");
     });
   });
 
