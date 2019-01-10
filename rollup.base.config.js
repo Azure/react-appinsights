@@ -1,11 +1,10 @@
-import nodeResolve from "rollup-plugin-node-resolve";
-import multiEntry from "rollup-plugin-multi-entry";
 import cjs from "rollup-plugin-commonjs";
+import json from "rollup-plugin-json";
+import multiEntry from "rollup-plugin-multi-entry";
+import nodeBuiltins from "rollup-plugin-node-builtins";
+import nodeResolve from "rollup-plugin-node-resolve";
 import replace from "rollup-plugin-replace";
 import { uglify } from "rollup-plugin-uglify";
-import { terser } from "rollup-plugin-terser";
-
-import nodeBuiltins from "rollup-plugin-node-builtins";
 import viz from "rollup-plugin-visualizer";
 
 const pkg = require("./package.json");
@@ -19,6 +18,7 @@ export function nodeConfig(test = false) {
     external: depNames.concat(externalNodeBuiltins),
     output: { file: "dist/index.js", format: "cjs", sourcemap: true },
     plugins: [
+      json(),
       replace({
         delimiters: ["", ""],
         values: {
@@ -61,6 +61,7 @@ export function browserConfig(test = false) {
       globals: { "ms-rest-js": "msRest" }
     },
     plugins: [
+      json(),
       replace(
         // ms-rest-js is externalized so users must include it prior to using this bundle.
         {
@@ -87,8 +88,8 @@ export function browserConfig(test = false) {
             "CoreUtils",
             "DiagnosticLogger"
           ],
-          'node_modules/react/index.js': ['Children', 'Component', 'PropTypes', 'createElement'],
-          'node_modules/react-dom/index.js': ['render']    
+          "node_modules/react/index.js": ["Children", "Component", "PropTypes", "createElement"],
+          "node_modules/react-dom/index.js": ["render"]
         }
       }),
       nodeBuiltins(),

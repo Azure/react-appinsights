@@ -1,6 +1,6 @@
 {
   "name": "react-appinsights",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "description": "Application Insights module for React applications",
   "main": "dist/index.js",
   "module": "dist-esm/src/index.js",
@@ -12,6 +12,7 @@
     "clean": "rimraf dist dist-*",
     "build": "tsc -p . && rollup -c && rollup -c rollup.test.config.js",
     "test": "jest --config jestconfig.json",
+    "test-watch": "jest --config jestconfig.json --watch",
     "pretest": "npm run build",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
@@ -44,13 +45,18 @@
   },
   "homepage": "https://github.com/Azure/react-appinsights#readme",
   "devDependencies": {
+    "@types/enzyme": "^3.1.15",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/history": "^4.7.2",
     "@types/jest": "^23.3.10",
     "@types/node": "^10.12.15",
     "@types/react": "^16.7.17",
     "@types/react-dom": "^16.0.11",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.6.0",
     "prettier": "^1.15.3",
+    "react-dom": "^16.7.0",
     "rimraf": "^2.6.2",
     "rollup": "^1.0.0",
     "rollup-plugin-commonjs": "^9.2.0",
@@ -72,8 +78,6 @@
   "dependencies": {
     "@microsoft/applicationinsights-web": "^1.0.0-beta.10",
     "history": "^4.7.2",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-idle-timer": "^4.1.3"
+    "react": "^16.7.0"
   }
 }

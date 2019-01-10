@@ -6,14 +6,14 @@ import { Action, History, Location } from "history";
 import { IReactAISettings } from ".";
 
 /**
- * Module to include Microsoft Application Insights in React applications
+ * Module to include Microsoft Application Insights in React applications.
  *
  * @export
  * @class ReactAI
  */
 export default class ReactAI {
   /**
-   * Initializaes a singleton instance of ReactAI based on supplied parameters
+   * Initializes a singleton instance of ReactAI based on supplied parameters.
    *
    * @static
    * @param {IReactAISettings} settings
@@ -24,9 +24,7 @@ export default class ReactAI {
     if (!this.ai) {
       this.ai = new ApplicationInsights({ config: settings, queue: [] });
       this.ai.loadAppInsights();
-      if (this.debug) {
-        console.log("ReactAI: Application Insights initialized with:", settings);
-      }
+      this.debugLog("ReactAI: Application Insights initialized with:", settings);
     }
     this.setContext(settings.initialContext || {}, true);
     this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
@@ -36,38 +34,38 @@ export default class ReactAI {
   }
 
   /**
-   * Returns underlying root instance of Application Insights
+   * Returns the underlying root instance of Application Insights.
    *
    * @readonly
    * @static
    * @type {ApplicationInsights}
    * @memberof ReactAI
    */
-  public static get RootInstance(): ApplicationInsights {
+  public static get rootInstance(): ApplicationInsights {
     return this.ai;
   }
 
   /**
-   * Returns current value of context/custom dimensions
+   * Returns the current value of context/custom dimensions.
    *
    * @readonly
    * @static
    * @type {{ [key: string]: any }}
    * @memberof ReactAI
    */
-  public static get Context(): { [key: string]: any } {
+  public static get context(): { [key: string]: any } {
     return this.contextProps || {};
   }
 
   /**
-   * Returns if ReactAI is in debug mode
+   * Returns if ReactAI is in debug mode.
    *
    * @readonly
    * @static
    * @type {boolean}
    * @memberof ReactAI
    */
-  public static get IsDebugMode(): boolean {
+  public static get isDebugMode(): boolean {
     return this.debug ? true : false;
   }
 
@@ -83,7 +81,7 @@ export default class ReactAI {
     if (clearPrevious) {
       this.contextProps = {};
       if (this.debug) {
-        console.log("Context reset.");
+        console.log("ReactAI: context reset.");
       }
     }
     properties = properties || {};
@@ -92,9 +90,7 @@ export default class ReactAI {
         this.contextProps[key] = properties[key];
       }
     }
-    if (this.debug) {
-      console.log("Context set to:", this.contextProps);
-    }
+    this.debugLog("ReactAI: context set to:", this.contextProps);
   }
 
   private static instance: ReactAI = new ReactAI();
@@ -105,7 +101,7 @@ export default class ReactAI {
   private static customDimensionsInitializer(): (item: ITelemetryItem) => boolean | void {
     return (envelope: ITelemetryItem) => {
       envelope.data = envelope.data || {};
-      const props = this.Context;
+      const props = this.context;
       for (const key in props) {
         if (props.hasOwnProperty(key)) {
           envelope.data[key] = props[key];
@@ -119,7 +115,7 @@ export default class ReactAI {
       (location: Location, action: Action): void => {
         this.ai.trackPageView({});
         if (this.debug) {
-          console.log("ReactAI: Recording page view", location, action);
+          console.log("ReactAI: recording page view", location, action);
         }
       }
     );
@@ -130,5 +126,11 @@ export default class ReactAI {
       throw new Error("ReactAI: use ReactAI.Instance() instead.");
     }
     ReactAI.instance = this;
+  }
+
+  private static debugLog(message: string, payload?: any): void {
+    if (ReactAI.isDebugMode) {
+      console.log(`ReactAI: ${message}`, payload);
+    }
   }
 }
