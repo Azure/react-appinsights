@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
 import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
@@ -12,7 +15,7 @@ describe("<TestComponentWithTracking /> i.e. reactAiWithTracking(TestComponent)"
   const TestComponentWithTracking = reactAIWithTracking(TestComponent);
   const trackedTestComponentWrapper = () => Enzyme.shallow(<TestComponentWithTracking />);
 
-  it("Should wrap <TestComponent />", () => {
+  it("should wrap <TestComponent />", () => {
     const component = trackedTestComponentWrapper();
     expect(component.find(TestComponent).length).toBe(1);
   });
