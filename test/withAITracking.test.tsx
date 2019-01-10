@@ -63,8 +63,8 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
 
     describe("When a custom component name is passed", () => {
       it("should use the passed component name in trackMetric", () => {
-        const TestComponentWithTracking = withAITracking(TestComponent, "MyCustomName");
-        const component = Enzyme.shallow(<TestComponentWithTracking />);
+        const TestComponentWithTrackingCustomName = withAITracking(TestComponent, "MyCustomName");
+        const component = Enzyme.shallow(<TestComponentWithTrackingCustomName />);
         component.simulate("mousemove");
         component.unmount();
 
@@ -77,7 +77,7 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
         };
 
         expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "MyCustomName" });
-      })
+      });
     });
   });
 });

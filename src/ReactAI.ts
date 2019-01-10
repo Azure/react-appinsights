@@ -13,27 +13,6 @@ import { IReactAISettings } from ".";
  */
 export default class ReactAI {
   /**
-   * Initializes a singleton instance of ReactAI based on supplied parameters.
-   *
-   * @static
-   * @param {IReactAISettings} settings
-   * @memberof ReactAI
-   */
-  public static initialize(settings: IReactAISettings & IConfiguration & IConfig): void {
-    this.debug = settings.debug;
-    if (!this.ai) {
-      this.ai = new ApplicationInsights({ config: settings, queue: [] });
-      this.ai.loadAppInsights();
-      this.debugLog("ReactAI: Application Insights initialized with:", settings);
-    }
-    this.setContext(settings.initialContext || {}, true);
-    this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
-    if (settings.history) {
-      this.addHistoryListener(settings.history);
-    }
-  }
-
-  /**
    * Returns the underlying root instance of Application Insights.
    *
    * @readonly
@@ -67,6 +46,26 @@ export default class ReactAI {
    */
   public static get isDebugMode(): boolean {
     return this.debug ? true : false;
+  }
+  /**
+   * Initializes a singleton instance of ReactAI based on supplied parameters.
+   *
+   * @static
+   * @param {IReactAISettings} settings
+   * @memberof ReactAI
+   */
+  public static initialize(settings: IReactAISettings & IConfiguration & IConfig): void {
+    this.debug = settings.debug;
+    if (!this.ai) {
+      this.ai = new ApplicationInsights({ config: settings, queue: [] });
+      this.ai.loadAppInsights();
+      this.debugLog("ReactAI: Application Insights initialized with:", settings);
+    }
+    this.setContext(settings.initialContext || {}, true);
+    this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
+    if (settings.history) {
+      this.addHistoryListener(settings.history);
+    }
   }
 
   /**
@@ -121,16 +120,16 @@ export default class ReactAI {
     );
   }
 
+  private static debugLog(message: string, payload?: any): void {
+    if (ReactAI.isDebugMode) {
+      console.log(`ReactAI: ${message}`, payload);
+    }
+  }
+
   private constructor() {
     if (ReactAI.instance) {
       throw new Error("ReactAI: use ReactAI.Instance() instead.");
     }
     ReactAI.instance = this;
-  }
-
-  private static debugLog(message: string, payload?: any): void {
-    if (ReactAI.isDebugMode) {
-      console.log(`ReactAI: ${message}`, payload);
-    }
   }
 }
