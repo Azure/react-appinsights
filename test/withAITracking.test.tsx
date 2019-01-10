@@ -29,20 +29,23 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
   });
 
   describe("When ReactAI is initialized", () => {
+
+    let trackMetricSpy: jest.SpyInstance;
+
     beforeEach(() => {
-      ReactAI.initialize({ instrumentationKey: "my-i-key", debug: false });
+      ReactAI.initialize({ instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx", debug: false });
+      trackMetricSpy = jest.spyOn(ReactAI.rootInstance, "trackMetric");
+      trackMetricSpy.mockReset();
     });
 
     describe("When component is unmounted", () => {
       it("shouldn't call trackMetric if no user interaction", () => {
-        const trackMetricSpy = jest.spyOn(ReactAI.rootInstance, "trackMetric");
         const component = trackedTestComponentWrapper();
         component.unmount();
         expect(trackMetricSpy).toHaveBeenCalledTimes(0);
       });
 
       it("should call trackMetric if there is user interaction", () => {
-        const trackMetricSpy = jest.spyOn(ReactAI.rootInstance, "trackMetric");
         const component = trackedTestComponentWrapper();
         component.simulate("keydown");
         component.unmount();
@@ -57,6 +60,25 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
 
         expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "TestComponent" });
       });
+    });
+
+    describe("When a custom component name is passed", () => {
+      it("should use the passed component name in trackMetric", () => {
+        const TestComponentWithTracking = withAITracking(TestComponent, "MyCustomName");
+        const component = Enzyme.shallow(<TestComponentWithTracking />);
+        component.simulate("mousemove");
+        component.unmount();
+
+        expect(trackMetricSpy).toHaveBeenCalledTimes(1);
+
+        const metricTelemetry: IMetricTelemetry = {
+          average: expect.any(Number),
+          name: "React Component Engaged Time (seconds)",
+          sampleCount: 1
+        };
+
+        expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "MyCustomName" });
+      })
     });
   });
 });

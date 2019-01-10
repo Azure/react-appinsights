@@ -5,10 +5,13 @@ import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as React from "react";
 import { ReactAI } from ".";
 
-export default function withAITracking<P>(Component: React.ComponentType<P>): React.ComponentClass<P> {
+export default function withAITracking<P>(Component: React.ComponentType<P>, componentName?: string): React.ComponentClass<P> {
+
+  if (componentName === undefined || componentName === null || typeof componentName !== 'string') {
+    componentName = Component.prototype.constructor.name;
+  }
 
   return class extends React.Component<P> {
-    private componentName: string = Component.prototype.constructor.name;
     private mountTimestamp: number = 0;
     private firstActiveTimestamp: number = 0;
     private idleStartTimestamp: number = 0;
@@ -60,10 +63,10 @@ export default function withAITracking<P>(Component: React.ComponentType<P>): Re
         sampleCount: 1
       };
 
-      const additionalProperties: { [key: string]: any } = { "Component Name": this.componentName };
+      const additionalProperties: { [key: string]: any } = { "Component Name": componentName };
       this.debugLog(
         "componentWillUnmount",
-        `Tracking ${engagementTime} seconds of engagement time for ${this.componentName}.`
+        `Tracking ${engagementTime} seconds of engagement time for ${componentName}.`
       );
       ReactAI.rootInstance.trackMetric(metricData, additionalProperties);
     }
@@ -101,7 +104,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>): Re
 
     private debugLog(from: string, message: string): void {
       if (ReactAI.isDebugMode) {
-        console.log(`withAITracking:${this.componentName}:${from}: ${message}`, {
+        console.log(`withAITracking:${componentName}:${from}: ${message}`, {
           engagementTime: this.getEngagementTimeSeconds(),
           firstActiveTime: this.firstActiveTimestamp,
           idleStartTime: this.idleStartTimestamp,
