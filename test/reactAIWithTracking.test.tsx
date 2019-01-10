@@ -36,14 +36,14 @@ describe("<TestComponentWithTracking /> i.e. reactAiWithTracking(TestComponent)"
 
     describe("When component is unmounted", () => {
       it("shouldn't call trackMetric if no user interaction", () => {
-        const trackMetricSpy = jest.spyOn(ReactAI.RootInstance, "trackMetric");
+        const trackMetricSpy = jest.spyOn(ReactAI.rootInstance, "trackMetric");
         const component = trackedTestComponentWrapper();
         component.unmount();
         expect(trackMetricSpy).toHaveBeenCalledTimes(0);
       });
 
       it("should call trackMetric if there is user interaction", () => {
-        const trackMetricSpy = jest.spyOn(ReactAI.RootInstance, "trackMetric");
+        const trackMetricSpy = jest.spyOn(ReactAI.rootInstance, "trackMetric");
         const component = trackedTestComponentWrapper();
         component.simulate("keydown");
         component.unmount();
