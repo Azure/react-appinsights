@@ -5,8 +5,9 @@ import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as React from "react";
 import { ReactAI } from ".";
 
-export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React.ComponentClass<P> {
-  class ReactAIWrappedComponent extends React.Component<P> {
+export default function withAITracking<P>(Component: React.ComponentType<P>): React.ComponentClass<P> {
+
+  return class extends React.Component<P> {
     private componentName: string = Component.prototype.constructor.name;
     private mountTimestamp: number = 0;
     private firstActiveTime: number = 0;
@@ -36,11 +37,11 @@ export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React
 
     public componentWillUnmount() {
       if (this.mountTimestamp === 0) {
-        throw new Error("reactAIWithTracking:componentWillUnmount: mountTimestamp isn't initialized.");
+        throw new Error("withAITracking:componentWillUnmount: mountTimestamp isn't initialized.");
       }
 
       if (!ReactAI.rootInstance) {
-        throw new Error("reactAIWithTracking:componentWillUnmount: ReactAI isn't initialized yet.");
+        throw new Error("withAITracking:componentWillUnmount: ReactAI isn't initialized yet.");
       }
 
       if (this.intervalId) {
@@ -97,7 +98,7 @@ export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React
 
     private logIfEnabled = (from: string, message: string) => {
       if (ReactAI.isDebugMode) {
-        console.log(`reactAIWithTracking:${this.componentName}:${from}: ${message}`, {
+        console.log(`withAITracking:${this.componentName}:${from}: ${message}`, {
           engagementTime: this.getEngagementTimeSeconds(),
           firstActiveTime: this.firstActiveTime,
           idleStartTime: this.idleStartTime,
@@ -112,8 +113,4 @@ export function reactAIWithTracking<P>(Component: React.ComponentType<P>): React
       return (Date.now() - this.firstActiveTime - this.idleTimeMs - this.idleCount * this.timeoutMs) / 1000;
     };
   }
-
-  return ReactAIWrappedComponent;
 }
-
-export default reactAIWithTracking;

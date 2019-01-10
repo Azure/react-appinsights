@@ -6,7 +6,7 @@ import { Action, History, Location } from "history";
 import { IReactAISettings } from ".";
 
 /**
- * Module to include Microsoft Application Insights in React applications
+ * Module to include Microsoft Application Insights in React applications.
  *
  * @export
  * @class ReactAI
@@ -83,7 +83,7 @@ export default class ReactAI {
     if (clearPrevious) {
       this.contextProps = {};
       if (this.debug) {
-        console.log("Context reset.");
+        console.log("ReactAI: context reset.");
       }
     }
     properties = properties || {};
@@ -93,7 +93,7 @@ export default class ReactAI {
       }
     }
     if (this.debug) {
-      console.log("Context set to:", this.contextProps);
+      console.log("ReactAI: context set to:", this.contextProps);
     }
   }
 
@@ -119,7 +119,7 @@ export default class ReactAI {
       (location: Location, action: Action): void => {
         this.ai.trackPageView({});
         if (this.debug) {
-          console.log("ReactAI: Recording page view", location, action);
+          console.log("ReactAI: recording page view", location, action);
         }
       }
     );
