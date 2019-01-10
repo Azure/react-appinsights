@@ -24,9 +24,7 @@ export default class ReactAI {
     if (!this.ai) {
       this.ai = new ApplicationInsights({ config: settings, queue: [] });
       this.ai.loadAppInsights();
-      if (this.debug) {
-        console.log("ReactAI: Application Insights initialized with:", settings);
-      }
+      this.debugLog("ReactAI: Application Insights initialized with:", settings);
     }
     this.setContext(settings.initialContext || {}, true);
     this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
@@ -92,9 +90,7 @@ export default class ReactAI {
         this.contextProps[key] = properties[key];
       }
     }
-    if (this.debug) {
-      console.log("ReactAI: context set to:", this.contextProps);
-    }
+    this.debugLog("ReactAI: context set to:", this.contextProps);
   }
 
   private static instance: ReactAI = new ReactAI();
@@ -130,5 +126,11 @@ export default class ReactAI {
       throw new Error("ReactAI: use ReactAI.Instance() instead.");
     }
     ReactAI.instance = this;
+  }
+
+  private static debugLog(message: string, payload?: any): void {
+    if (ReactAI.isDebugMode) {
+      console.log(`ReactAI: ${message}`, payload);
+    }
   }
 }
