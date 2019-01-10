@@ -29,7 +29,6 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
   });
 
   describe("When ReactAI is initialized", () => {
-
     let trackMetricSpy: jest.SpyInstance;
 
     beforeEach(() => {
