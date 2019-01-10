@@ -5,14 +5,13 @@ import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
-import { ReactAI } from "../src";
-import reactAIWithTracking from "../src/reactAIWithTracking";
+import { ReactAI, withAITracking } from "../src";
 import { TestComponent } from "./TestComponent";
 
 Enzyme.configure({ adapter: new Adapter.default() });
 
-describe("<TestComponentWithTracking /> i.e. reactAiWithTracking(TestComponent)", () => {
-  const TestComponentWithTracking = reactAIWithTracking(TestComponent);
+describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () => {
+  const TestComponentWithTracking = withAITracking(TestComponent);
   const trackedTestComponentWrapper = () => Enzyme.shallow(<TestComponentWithTracking />);
 
   it("should wrap <TestComponent />", () => {
