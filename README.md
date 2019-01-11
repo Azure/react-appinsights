@@ -117,8 +117,6 @@ Use the following method to get the original AppInsights object:
 var appInsights = ReactAI.rootInstance;
 ```
 
-#### 
-
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights. 
 
 
