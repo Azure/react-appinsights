@@ -123,7 +123,7 @@ Refer to [this doc][appinsights-js-api] for information on the Javascript API of
 
 The initialization function is an [intersection type][intersection-types] made of `IReactAISettings & IConfiguration & IConfig` - with `IReactAISettings` provided by the `ReactAI` library and rest of the configuration provided by [Application Insights][appinsights-js].
 
-Essentially, `instrumentationKey` is the only mandatory configuration option but initialization with intersection type allows you to leverage features of both libraries like this for example.
+Essentially, `instrumentationKey` is the only mandatory configuration option but initialization with intersection type allows you to leverage features of both libraries, as in the following example:
 
 ```javascript
 ReactAI.initialize({
