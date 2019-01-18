@@ -4,5 +4,8 @@
   },
   "prettier.printWidth": 120,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[markdown]": {
+    "editor.formatOnSave": false
+  }
 }
