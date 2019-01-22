@@ -5,6 +5,7 @@ import {
   ApplicationInsights,
   IConfig,
   IConfiguration,
+  IPageViewTelemetry,
   ITelemetryItem
 } from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
