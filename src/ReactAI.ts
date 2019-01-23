@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ApplicationInsights, IConfig, IConfiguration, ITelemetryItem } from "@microsoft/applicationinsights-web";
+import { ApplicationInsights, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem } from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
 import { IReactAISettings } from ".";
 
@@ -59,7 +59,7 @@ export default class ReactAI {
     if (!this.ai) {
       this.ai = new ApplicationInsights({ config: settings, queue: [] });
       this.ai.loadAppInsights();
-      this.debugLog("ReactAI: Application Insights initialized with:", settings);
+      this.debugLog("Application Insights initialized with:", settings);
     }
     this.setContext(settings.initialContext || {}, true);
     this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
@@ -79,9 +79,7 @@ export default class ReactAI {
   public static setContext(properties: { [key: string]: any }, clearPrevious: boolean = false): void {
     if (clearPrevious) {
       this.contextProps = {};
-      if (this.debug) {
-        console.log("ReactAI: context reset.");
-      }
+      this.debugLog("context is reset.");
     }
     properties = properties || {};
     for (const key in properties) {
@@ -89,7 +87,7 @@ export default class ReactAI {
         this.contextProps[key] = properties[key];
       }
     }
-    this.debugLog("ReactAI: context set to:", this.contextProps);
+    this.debugLog("context is set to:", this.context);
   }
 
   private static instance: ReactAI = new ReactAI();
@@ -112,17 +110,19 @@ export default class ReactAI {
   private static addHistoryListener(history: History): void {
     history.listen(
       (location: Location, action: Action): void => {
-        this.ai.trackPageView({});
-        if (this.debug) {
-          console.log("ReactAI: recording page view", location, action);
-        }
+        // Timeout to ensure any changes to the DOM made by route changes get included in pageView telemetry
+        setTimeout(() => {
+          const pageViewTelemetry: IPageViewTelemetry = { uri: location.pathname, properties: this.context };
+          this.ai.trackPageView(pageViewTelemetry);
+          this.debugLog("recording page view.", `uri: ${location.pathname} action: ${action}`);
+        }, 500);
       }
     );
   }
 
   private static debugLog(message: string, payload?: any): void {
     if (ReactAI.isDebugMode) {
-      console.log(`ReactAI: ${message}`, payload);
+      console.log(`ReactAI: ${message}`, payload === undefined ? "" : payload);
     }
   }
 
