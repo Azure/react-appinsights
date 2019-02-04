@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ApplicationInsights, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem } from "@microsoft/applicationinsights-web";
-import { Action, History, Location } from "history";
+import { ApplicationInsights, IAppInsightsCore, IConfiguration, IPageViewTelemetry, ITelemetryItem, ITelemetryPlugin } from "@microsoft/applicationinsights-web";
+import { Action, Location } from "history";
 import { IReactAISettings } from ".";
 
 /**
@@ -11,17 +11,40 @@ import { IReactAISettings } from ".";
  * @export
  * @class ReactAI
  */
-export default class ReactAI {
+export class ReactAI implements ITelemetryPlugin {
+
+  private constructor() {
+    // if (ReactAI.instance) {
+    //   throw new Error("ReactAI: use ReactAI.Instance() instead.");
+    // }
+    // ReactAI.instance = this;
+    this.processTelemetry = this.customDimensionsInitializer.bind(this);
+  }
+
   /**
    * Returns the underlying root instance of Application Insights.
    *
-   * @readonly
-   * @static
-   * @type {ApplicationInsights}
-   * @memberof ReactAI
+  //  * @readonly
+  //  * @static
+  //  * @type {ApplicationInsights}
+  //  * @memberof ReactAI
    */
-  public static get rootInstance(): ApplicationInsights {
-    return this.ai;
+
+  private _applicationInsights: ApplicationInsights;
+  private _nextPlugin: ITelemetryPlugin;
+
+  public get rootInstance(): ApplicationInsights {
+    return this._applicationInsights;
+  }
+
+  public processTelemetry: (env: ITelemetryItem) => void;
+
+  public priority = 200;
+
+  public identifier = "ApplicationInsightsReactUsage";
+
+  public setNextPlugin(plugin: ITelemetryPlugin) {
+    this._nextPlugin = plugin;
   }
 
   /**
@@ -32,7 +55,7 @@ export default class ReactAI {
    * @type {{ [key: string]: any }}
    * @memberof ReactAI
    */
-  public static get context(): { [key: string]: any } {
+  public get context(): { [key: string]: any } {
     return this.contextProps || {};
   }
 
@@ -44,7 +67,7 @@ export default class ReactAI {
    * @type {boolean}
    * @memberof ReactAI
    */
-  public static get isDebugMode(): boolean {
+  public get isDebugMode(): boolean {
     return this.debug ? true : false;
   }
   /**
@@ -54,15 +77,17 @@ export default class ReactAI {
    * @param {IReactAISettings} settings
    * @memberof ReactAI
    */
-  public static initialize(settings: IReactAISettings & IConfiguration & IConfig): void {
-    this.debug = settings.debug;
-    if (!this.ai) {
-      this.ai = new ApplicationInsights({ config: settings, queue: [] });
-      this.ai.loadAppInsights();
-      this.debugLog("Application Insights initialized with:", settings);
+  public initialize(config: IConfiguration, core: IAppInsightsCore, extensions: ITelemetryPlugin[]): void {
+    let settings = config && config.extensionConfig && config.extensionConfig[this.identifier] ?
+      <IReactAISettings>(config.extensionConfig[this.identifier]) : { debug: false };
+
+    let idx = extensions.indexOf((e: ITelemetryPlugin) => e.identifier === 'ApplicationInsightsAnalytics');
+    if (idx > 0) {
+      this._applicationInsights = <ApplicationInsights>extensions[idx];
     }
+
+    this.debug = settings.debug;
     this.setContext(settings.initialContext || {}, true);
-    this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
     if (settings.history) {
       this.addHistoryListener(settings.history);
     }
@@ -76,7 +101,7 @@ export default class ReactAI {
    * @param {boolean} [clearPrevious=false] - if false(default) multiple calls to setContext will append to/overwrite existing custom dimensions, if true the values are reset
    * @memberof ReactAI
    */
-  public static setContext(properties: { [key: string]: any }, clearPrevious: boolean = false): void {
+  public setContext(properties: { [key: string]: any }, clearPrevious: boolean = false): void {
     if (clearPrevious) {
       this.contextProps = {};
       this.debugLog("context is reset.");
@@ -90,46 +115,42 @@ export default class ReactAI {
     this.debugLog("context is set to:", this.context);
   }
 
-  private static instance: ReactAI = new ReactAI();
-  private static ai: ApplicationInsights;
-  private static contextProps: { [key: string]: any } = {};
-  private static debug?: boolean;
+  // private instance: ReactAI = new ReactAI();
+  // private ai: ApplicationInsights;
+  private contextProps: { [key: string]: any } = {};
+  private debug?: boolean;
 
-  private static customDimensionsInitializer(): (item: ITelemetryItem) => boolean | void {
-    return (envelope: ITelemetryItem) => {
-      envelope.data = envelope.data || {};
-      const props = this.context;
-      for (const key in props) {
-        if (props.hasOwnProperty(key)) {
-          envelope.data[key] = props[key];
-        }
+  private customDimensionsInitializer(envelope: ITelemetryItem): void {
+    envelope.data = envelope.data || {};
+    const props = this.context;
+    for (const key in props) {
+      if (props.hasOwnProperty(key)) {
+        envelope.data[key] = props[key];
       }
-    };
+    }
+
+    if (this._nextPlugin) {
+      this._nextPlugin.processTelemetry(envelope);
+    }
   }
 
-  private static addHistoryListener(history: History): void {
+  private addHistoryListener(history: History): void {
     history.listen(
       (location: Location, action: Action): void => {
         // Timeout to ensure any changes to the DOM made by route changes get included in pageView telemetry
         setTimeout(() => {
           const pageViewTelemetry: IPageViewTelemetry = { uri: location.pathname, properties: this.context };
-          this.ai.trackPageView(pageViewTelemetry);
+          this._applicationInsights.trackPageView(pageViewTelemetry);
           this.debugLog("recording page view.", `uri: ${location.pathname} action: ${action}`);
         }, 500);
       }
     );
   }
 
-  private static debugLog(message: string, payload?: any): void {
-    if (ReactAI.isDebugMode) {
+  private debugLog(message: string, payload?: any): void {
+    if (this.isDebugMode) {
       console.log(`ReactAI: ${message}`, payload === undefined ? "" : payload);
     }
   }
 
-  private constructor() {
-    if (ReactAI.instance) {
-      throw new Error("ReactAI: use ReactAI.Instance() instead.");
-    }
-    ReactAI.instance = this;
-  }
 }

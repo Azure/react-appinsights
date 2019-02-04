@@ -83,6 +83,7 @@ export function browserConfig(test = false) {
           events: ["EventEmitter"],
           "node_modules/@microsoft/applicationinsights-core-js/browser/applicationinsights-core-js.min.js": [
             "AppInsightsCore",
+            "ITelemetryPlugin",
             "LoggingSeverity",
             "_InternalMessageId",
             "CoreUtils",
