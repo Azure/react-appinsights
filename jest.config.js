@@ -10,5 +10,5 @@ module.exports = {
     transformIgnorePatterns: [
         "<rootDir>/node_modules/(?!(applicationinsights-js)/)"
       ],
-    setupTestFrameworkScriptFile:  "<rootDir>/test/setupTests.js",
+    setupFilesAfterEnv:  ["<rootDir>/test/setupTests.js"],
 };
