@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [2.0.2] - 2019-01-20
+
+### Change
+
+- Dependencies' versions bump - add support for React 16.8.x
+
 ## [2.0.1] - 2018-12-10
 
 ### Fixed
@@ -38,6 +44,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - `setAppContext` function to enrich tracking with custom information
 - `ai` function to access Application Insights SDK API
 
-[unreleased]: https://github.com/Azure/react-appinsights/compare/v2.0.1...HEAD
+[unreleased]: https://github.com/Azure/react-appinsights/compare/v2.0.2...HEAD
 [2.0.0]: https://github.com/Azure/react-appinsights/compare/v1.0.4...v2.0.0
 [2.0.1]: https://github.com/Azure/react-appinsights/compare/v2.0.0...v2.0.1
+[2.0.2]: https://github.com/Azure/react-appinsights/compare/v2.0.1...v2.0.2
