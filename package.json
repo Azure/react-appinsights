@@ -1,6 +1,6 @@
 {
   "name": "react-appinsights",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Application Insights module for React applications",
   "main": "dist/index.js",
   "scripts": {
