@@ -65,6 +65,12 @@ export default class ReactAI {
     this.ai.addTelemetryInitializer(this.customDimensionsInitializer());
     if (settings.history) {
       this.addHistoryListener(settings.history);
+
+      // Record initial page view, since history.listen is not fired for the initial page
+      // (see: https://github.com/ReactTraining/history/issues/479#issuecomment-307544999 )
+      const pageViewTelemetry: IPageViewTelemetry = { uri: settings.history.location.pathname, properties: this.context };
+      this.ai.trackPageView(pageViewTelemetry);
+      this.debugLog("recording initial page view.", `uri: ${location.pathname}`);
     }
   }
 
