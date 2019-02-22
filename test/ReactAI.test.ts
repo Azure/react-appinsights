@@ -59,19 +59,27 @@ describe("ReactAI", () => {
     const ReactAI = require("../src/ReactAI").default;
     const emulatedHistory = createHistory();
     const initialContext = { prop1: "value1" };
-    ReactAI.initialize({ instrumentationKey: IKEY, initialContext, debug: true, history: emulatedHistory });
+
+    // Mock the internal instance of AppInsights
+    ReactAI.ai = {};
     ReactAI.rootInstance.trackPageView = jest.fn();
+    ReactAI.rootInstance.addTelemetryInitializer = jest.fn();
     jest.useFakeTimers();
 
-    // emulate change in history
+    ReactAI.initialize({ instrumentationKey: IKEY, initialContext, debug: true, history: emulatedHistory });
+    // Should call trackPageView upon initialization to track the view of the initial page
+
+    // Emulate navigation to different URL-addressed pages
     emulatedHistory.push("/home", { some: "state" });
     emulatedHistory.push("/new-fancy-page");
     jest.runOnlyPendingTimers();
 
-    const pageViewTelemetry1 = { uri: "/home", properties: initialContext };
-    const pageViewTelemetry2 = { uri: "/new-fancy-page", properties: initialContext };
-    expect(ReactAI.rootInstance.trackPageView).toHaveBeenCalledTimes(2);
+    const pageViewTelemetry1 = { uri: "/", properties: initialContext };
+    const pageViewTelemetry2 = { uri: "/home", properties: initialContext };
+    const pageViewTelemetry3 = { uri: "/new-fancy-page", properties: initialContext };
+    expect(ReactAI.rootInstance.trackPageView).toHaveBeenCalledTimes(3);
     expect(ReactAI.rootInstance.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry1);
     expect(ReactAI.rootInstance.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry2);
+    expect(ReactAI.rootInstance.trackPageView).toHaveBeenNthCalledWith(3, pageViewTelemetry3);
   });
 });
