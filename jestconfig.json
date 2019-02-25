@@ -22,5 +22,10 @@
   "coveragePathIgnorePatterns": [
     "/node_modules/",
     "/test/"
+  ],
+  "coverageReporters": [
+    "cobertura",
+    "lcov",
+    "text"
   ]
 }
