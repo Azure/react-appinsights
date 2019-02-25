@@ -18,5 +18,14 @@
     "dist-esm"
   ],
   "testResultsProcessor": "./node_modules/jest-junit-reporter",
-  "collectCoverage": true
+  "collectCoverage": true,
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "/test/"
+  ],
+  "coverageReporters": [
+    "cobertura",
+    "lcov",
+    "text"
+  ]
 }
