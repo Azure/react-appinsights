@@ -26,3 +26,11 @@ steps:
     npm run build
     npm test
   displayName: 'npm install, build and test'
+
+- task: PublishTestResults@2
+  inputs:
+      testResultsFiles: '**/test-report.xml' 
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    summaryFileLocation: $(System.DefaultWorkingDirectory)/**/clover.xml

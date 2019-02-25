@@ -3,6 +3,20 @@
     "^.+\\.(t|j)sx?$": "ts-jest"
   },
   "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
-  "testPathIgnorePatterns": ["node_modules", "legacy", "dist", "dist-esm"]
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ],
+  "testPathIgnorePatterns": [
+    "node_modules",
+    "legacy",
+    "dist",
+    "dist-esm"
+  ],
+  "testResultsProcessor": "./node_modules/jest-junit-reporter",
+  "collectCoverage": true
 }
