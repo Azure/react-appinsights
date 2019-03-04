@@ -1,11 +1,11 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
+import { ApplicationInsights, IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
-import { ReactAI, withAITracking } from "../src";
+import { ReactAI, ReactAIContainer, withAITracking } from "../src";
 import { TestComponent } from "./TestComponent";
 
 Enzyme.configure({ adapter: new Adapter.default() });
@@ -32,8 +32,19 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
     let trackMetricSpy: jest.SpyInstance;
 
     beforeEach(() => {
-      ReactAI.initialize({ instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx", debug: false });
-      trackMetricSpy = jest.spyOn(ReactAI.rootInstance, "trackMetric");
+      let reactAI = new ReactAI();
+      let appInsights = new ApplicationInsights({
+        config: {
+          instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+          extensions: [reactAI],
+          extensionConfig: {
+            "ApplicationInsightsReactUsage": { debug: false }
+          }
+        }
+      });
+
+      ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
+      trackMetricSpy = jest.spyOn(appInsights, "trackMetric");
       trackMetricSpy.mockReset();
     });
 
