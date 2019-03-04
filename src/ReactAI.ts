@@ -3,7 +3,7 @@
 
 import { IPlugin } from '@microsoft/applicationinsights-core-js';
 import { IAppInsightsCore, IApplicationInsights, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem, ITelemetryPlugin } from "@microsoft/applicationinsights-web";
-import { Action, Location } from "history";
+import { Action, History, Location } from "history";
 import IReactAISettings from './IReactAISettings';
 
 /**
