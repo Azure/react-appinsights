@@ -10,7 +10,7 @@
   "types": "dist-esm/src/index.d.ts",
   "scripts": {
     "clean": "rimraf dist dist-*",
-    "build": "tsc -v && tsc -p . && rollup -c && rollup -c rollup.test.config.js",
+    "build": "tsc -p . && rollup -c && rollup -c rollup.test.config.js",
     "test": "jest --config jestconfig.json",
     "test-watch": "jest --config jestconfig.json --watch",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",

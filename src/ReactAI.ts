@@ -16,7 +16,7 @@ export default class ReactAI implements ITelemetryPlugin {
   public static extensionIdentifier = "ApplicationInsightsReactUsage";
   processTelemetry: (env: ITelemetryItem) => void;
   public identifier = ReactAI.extensionIdentifier;
-  priority: number = 300;
+  priority: number = 201;
   private _nextPlugin!: ITelemetryPlugin;
   private _initialized = false;
   private debug: boolean | undefined;
