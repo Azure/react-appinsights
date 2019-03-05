@@ -26,6 +26,7 @@ export default class ReactAIContainer {
         }
 
         let found = false;
+        // In version 2.0 of applicationinsights-web, any cast is not required as the property _extensions is public 
         let exts = <ITelemetryPlugin[]>(<any>this.ai.core)._extensions;
         exts = exts ? exts : [];
         for (let i = 0; i < exts.length; i++) {
