@@ -10,7 +10,60 @@ import { TestComponent } from "./TestComponent";
 
 Enzyme.configure({ adapter: new Adapter.default() });
 
+describe("ReactAIContainer setup scenarios", () => {
+  it("When ReactAI is not one of extensions in appInsights, container setup throws", () => {
+    expect(() => {
+      let reactAI: ReactAI = new ReactAI();
+      let appInsights = new ApplicationInsights({
+        config: {
+          instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+        }
+      });
+      appInsights.loadAppInsights();
+
+      ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
+    }).toThrowError("Input ReactAI extension is not one of extensions in appInsights instance");
+  });
+
+  it("When ReactAI is invalid, container setup throws", () => {
+    expect(() => {
+      let reactAI!: ReactAI;
+      let appInsights = new ApplicationInsights({
+        config: {
+          instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+        }
+      });
+      appInsights.loadAppInsights();
+
+      ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
+    }).toThrowError("Invalid input for ReactAI");
+  });
+
+  it("When ReactAI is invalid, container setup throws", () => {
+    expect(() => {
+      let reactAI: ReactAI = new ReactAI();
+      let appInsights!: ApplicationInsights;
+
+      ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
+    }).toThrowError("Invalid input for application insights");
+  });
+});
+
 describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () => {
+  let reactAI = new ReactAI();
+  let appInsights = new ApplicationInsights({
+    config: {
+      instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+      extensions: [reactAI],
+      extensionConfig: {
+        [ReactAI.extensionIdentifier]: { debug: false }
+      }
+    }
+  });
+  appInsights.loadAppInsights();
+
+  ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
+
   const TestComponentWithTracking = withAITracking(TestComponent);
   const trackedTestComponentWrapper = () => Enzyme.shallow(<TestComponentWithTracking />);
 
@@ -19,31 +72,10 @@ describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () 
     expect(component.find(TestComponent).length).toBe(1);
   });
 
-  describe("When ReactAI is not initialized", () => {
-    it("should throw error when unmounting", () => {
-      expect(() => {
-        const component = trackedTestComponentWrapper();
-        component.unmount();
-      }).toThrowError("ReactAI isn't initialized yet");
-    });
-  });
-
   describe("When ReactAI is initialized", () => {
-    let trackMetricSpy: jest.SpyInstance;
+    let trackMetricSpy: jest.SpyInstance;;
 
     beforeEach(() => {
-      let reactAI = new ReactAI();
-      let appInsights = new ApplicationInsights({
-        config: {
-          instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
-          extensions: [reactAI],
-          extensionConfig: {
-            "ApplicationInsightsReactUsage": { debug: false }
-          }
-        }
-      });
-
-      ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
       trackMetricSpy = jest.spyOn(appInsights, "trackMetric");
       trackMetricSpy.mockReset();
     });

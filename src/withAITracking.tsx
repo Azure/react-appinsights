@@ -10,6 +10,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
   if (componentName === undefined || componentName === null || typeof componentName !== 'string') {
     componentName = Component.prototype.constructor.name;
   }
+
   let container = ReactAIContainer.defaultReactAIContainer;
   let ai = container.applicationInsights;
   let reactAI = container.reactAI;

@@ -14,13 +14,14 @@ import IReactAISettings from './IReactAISettings';
  */
 export default class ReactAI implements ITelemetryPlugin {
   public static extensionIdentifier = "ApplicationInsightsReactUsage";
+  public static ApplicationInsightsAnalyticsIdentifier = "ApplicationInsightsAnalytics";
   processTelemetry: (env: ITelemetryItem) => void;
   public identifier = ReactAI.extensionIdentifier;
-  priority: number = 201;
+  priority: number = 190;
   private _nextPlugin!: ITelemetryPlugin;
   private _initialized = false;
   private debug: boolean | undefined;
-  private ai!: IApplicationInsights;
+  public _aiInternal!: IApplicationInsights; // public for testing only
 
   public constructor() {
     this.processTelemetry = this.customDimensionsInitializer.bind(this);
@@ -65,21 +66,26 @@ export default class ReactAI implements ITelemetryPlugin {
       this.debug = reactAISettings.debug;
       this.setContext(reactAISettings.initialContext || {}, true);
       extensions.forEach((ext, idx) => {
-        if ((<ITelemetryPlugin>ext).identifier === "AppAnalyticsPlugin") {
-          this.ai = <any>ext;
+        if ((<ITelemetryPlugin>ext).identifier === ReactAI.ApplicationInsightsAnalyticsIdentifier) {
+          this._aiInternal = <any>ext;
         }
-      })
+      });
       if (reactAISettings.history) {
         this.addHistoryListener(reactAISettings.history);
-        // Record initial page view, since history.listen is not fired for the initial page
-        // (see: https://github.com/ReactTraining/history/issues/479#issuecomment-307544999 )
         const pageViewTelemetry: IPageViewTelemetry = { uri: reactAISettings.history.location.pathname, properties: this.context };
-        this.ai.trackPageView(pageViewTelemetry);
-        this.debugLog("recording initial page view.", `uri: ${location.pathname}`);
+        this._trackInitialPageViewInternal(pageViewTelemetry);
       }
 
       this._initialized = true;
     }
+  }
+
+  // internal only, public method for testing
+  public _trackInitialPageViewInternal(telemetry: IPageViewTelemetry) {
+    // Record initial page view, since history.listen is not fired for the initial page
+    // (see: https://github.com/ReactTraining/history/issues/479#issuecomment-307544999 )
+    this._aiInternal.trackPageView(telemetry);
+    this.debugLog("recording initial page view.", `uri: ${location.pathname}`);
   }
 
   /**
@@ -124,7 +130,7 @@ export default class ReactAI implements ITelemetryPlugin {
         // Timeout to ensure any changes to the DOM made by route changes get included in pageView telemetry
         setTimeout(() => {
           const pageViewTelemetry: IPageViewTelemetry = { uri: location.pathname, properties: this.context };
-          this.ai.trackPageView(pageViewTelemetry);
+          this._aiInternal.trackPageView(pageViewTelemetry);
           this.debugLog("recording page view.", `uri: ${location.pathname} action: ${action}`);
         }, 500);
       }

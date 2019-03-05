@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { ApplicationInsights, ITelemetryPlugin } from '@microsoft/applicationinsights-web';
 import { ReactAI } from ".";
 
 /**
@@ -16,13 +16,27 @@ export default class ReactAIContainer {
     private _reactAI: ReactAI;
     public constructor(appInsights: ApplicationInsights, reactAI: ReactAI) {
         if (appInsights === undefined || appInsights === null) {
-            throw new Error("Invalid input");
+            throw new Error("Invalid input for application insights");
         }
         this.ai = appInsights;
 
         this._reactAI = reactAI;
         if (this._reactAI === undefined || this._reactAI === null) {
-            throw new Error("No extension found for ReactAI");
+            throw new Error("Invalid input for ReactAI");
+        }
+
+        let found = false;
+        let exts = <ITelemetryPlugin[]>(<any>this.ai.core)._extensions;
+        exts = exts ? exts : [];
+        for (let i = 0; i < exts.length; i++) {
+            if (exts[i].identifier === ReactAI.extensionIdentifier) {
+                found = true;
+                break;
+            }
+        };
+
+        if (!found) {
+            throw new Error("Input ReactAI extension is not one of extensions in appInsights instance");
         }
     }
 

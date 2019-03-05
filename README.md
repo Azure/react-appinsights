@@ -23,20 +23,21 @@ To initialize Application Insights add the following to the entry point
 file of your application (e.g. index.js):
 
 ```javascript
-import { ReactAIContainer } from "react-appinsights";
+import { ReactAIContainer, ReactAI } from "react-appinsights";
 import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 
 let myReactAI = new ReactAI();
 let appInsights = new ApplicationInsights({
   config: {
     instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
-    extensions: [myReactAI],
+    extensions: [myReactAI.extensionIdentifier],
     extensionConfig: {
-      "ApplicationInsightsReactUsage": { debug: false }
+      [ReactAI.extensionIdentifier]: { debug: false }
     }
   }
 });
 
+appInsights.loadAppInsights();
 ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
 ```
 
@@ -67,7 +68,7 @@ const history = createBrowserHistory();
 
 In the code sample above, set configuration as follows:
     extensionConfig: {
-      "ApplicationInsightsReactUsage": { debug: false, history: history }
+      [ReactAI.extensionIdentifier]: { debug: false, history: history }
     }
 
 ReactDOM.render(
@@ -145,7 +146,7 @@ Essentially, `instrumentationKey` is the only mandatory configuration option but
 ```javascript
 ReactAI.initialize({
   extensionConfig: {
-    "ApplicationInsightsReactUsage": {
+    [ReactAI.extensionIdentifier]: {
       {
         debug: true,
         history: history

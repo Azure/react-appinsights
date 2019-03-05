@@ -54,6 +54,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "jest": "^24.1.0",
+    "jest-environment-node-debug": "^2.0.0",
     "jest-junit-reporter": "^1.1.0",
     "prettier": "^1.16.4",
     "react-dom": "^16.8.3",

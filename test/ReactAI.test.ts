@@ -19,10 +19,11 @@ describe("ReactAI", () => {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "ApplicationInsightsReactUsage": { debug: false }
+          "[ReactAI.extensionIdentifier]": { debug: false }
         }
       }
     });
+    appInsights.loadAppInsights();
     expect(reactAI).not.toBe(undefined);
     expect(appInsights).not.toBe(undefined);
   });
@@ -35,10 +36,12 @@ describe("ReactAI", () => {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "ApplicationInsightsReactUsage": { debug: true }
+          [ReactAI.extensionIdentifier]: { debug: true }
         }
       }
     });
+    appInsights.loadAppInsights();
+
     expect(reactAI.isDebugMode).toBe(true);
   });
 
@@ -49,10 +52,11 @@ describe("ReactAI", () => {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "ApplicationInsightsReactUsage": { debug: false }
+          [ReactAI.extensionIdentifier]: { debug: false }
         }
       }
     });
+    appInsights.loadAppInsights();
     reactAI.setContext({ prop1: "value1", prop2: "value2" });
     expect(reactAI.context.prop1).toBe("value1");
     expect(reactAI.context.prop2).toBe("value2");
@@ -65,10 +69,11 @@ describe("ReactAI", () => {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "ApplicationInsightsReactUsage": { debug: false }
+          [ReactAI.extensionIdentifier]: { debug: false }
         }
       }
     });
+    appInsights.loadAppInsights();
     reactAI.setContext({ prop1: "value1" });
     expect(reactAI.context.prop1).toBe("value1");
     reactAI.setContext({ prop3: "value3" }, true);
@@ -83,10 +88,11 @@ describe("ReactAI", () => {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "ApplicationInsightsReactUsage": { debug: false, initialContext: { prop1: "value1" } }
+          [ReactAI.extensionIdentifier]: { debug: false, initialContext: { prop1: "value1" } }
         }
       }
     });
+    appInsights.loadAppInsights();
 
     expect(reactAI.context.prop1).toBe("value1");
     expect(reactAI.context.prop2).toBe(undefined);
@@ -104,30 +110,35 @@ describe("ReactAI", () => {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "ApplicationInsightsReactUsage": {
+          [ReactAI.extensionIdentifier]: {
             debug: false, initialContext: initialContext, history: emulatedHistory
           }
         }
       }
     });
 
-    // Mock the internal instance of AppInsights
-    appInsights.trackPageView = jest.fn();
-    appInsights.addTelemetryInitializer = jest.fn();
+    reactAI._trackInitialPageViewInternal = jest.fn();
     jest.useFakeTimers();
+    appInsights.loadAppInsights();
 
+    const pageViewTelemetry1 = { uri: "/", properties: initialContext };
+    expect(reactAI._trackInitialPageViewInternal).toHaveBeenNthCalledWith(1, pageViewTelemetry1);
+
+    jest.restoreAllMocks();
+
+    // Mock the internal instance of AppInsights
+    reactAI._aiInternal.trackPageView = jest.fn();
+    reactAI._aiInternal.addTelemetryInitializer = jest.fn();
 
     // Emulate navigation to different URL-addressed pages
     emulatedHistory.push("/home", { some: "state" });
     emulatedHistory.push("/new-fancy-page");
     jest.runOnlyPendingTimers();
 
-    const pageViewTelemetry1 = { uri: "/", properties: initialContext };
     const pageViewTelemetry2 = { uri: "/home", properties: initialContext };
     const pageViewTelemetry3 = { uri: "/new-fancy-page", properties: initialContext };
-    expect(appInsights.trackPageView).toHaveBeenCalledTimes(3);
-    expect(appInsights.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry1);
-    expect(appInsights.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry2);
-    expect(appInsights.trackPageView).toHaveBeenNthCalledWith(3, pageViewTelemetry3);
+    expect(reactAI._aiInternal.trackPageView).toHaveBeenCalledTimes(2);
+    expect(reactAI._aiInternal.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry2);
+    expect(reactAI._aiInternal.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry3);
   });
 });
