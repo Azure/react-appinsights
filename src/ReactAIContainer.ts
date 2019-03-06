@@ -5,7 +5,8 @@ import { ApplicationInsights, ITelemetryPlugin } from '@microsoft/applicationins
 import { ReactAI } from ".";
 
 /**
- * Module to include Microsoft Application Insights in React applications.
+ * Utility singleton object that contains instances of ReactAI and Application Insights.
+ * This is used in the withAITracking higher-order component function.
  *
  * @export
  * @class ReactAIContainer
@@ -30,7 +31,7 @@ export default class ReactAIContainer {
         let exts = <ITelemetryPlugin[]>(<any>this.ai.core)._extensions;
         exts = exts ? exts : [];
         for (let i = 0; i < exts.length; i++) {
-            if (exts[i].identifier === ReactAI.extensionIdentifier) {
+            if (exts[i].identifier === ReactAI.extensionId) {
                 found = true;
                 break;
             }
@@ -41,14 +42,6 @@ export default class ReactAIContainer {
         }
     }
 
-    /**
-    * Returns the underlying root instance of Application Insights.
-    *
-    * @readonly
-    * @static
-    * @type {ApplicationInsights}
-    * @memberof ReactAI
-    */
     public get reactAI(): ReactAI {
         return this._reactAI;
     }
