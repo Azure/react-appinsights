@@ -21,8 +21,9 @@ export default class ReactAI implements ITelemetryPlugin {
   priority: number = 190;
   private _nextPlugin!: ITelemetryPlugin;
   private _initialized = false;
-  private debug: boolean | undefined;
-  public _aiInternal!: IApplicationInsights; // public for testing only
+  public static debug: boolean = false;
+  public _aiInternal!: IApplicationInsights;
+  private contextProps: { [key: string]: any } = {};
 
   public constructor() {
     this.processTelemetry = this.customDimensionsInitializer.bind(this);
@@ -50,8 +51,8 @@ export default class ReactAI implements ITelemetryPlugin {
    * @type {boolean}
    * @memberof ReactAI
    */
-  public get isDebugMode(): boolean {
-    return this.debug ? true : false;
+  public static get isDebugMode(): boolean {
+    return ReactAI.debug;
   }
 
   /**
@@ -64,7 +65,7 @@ export default class ReactAI implements ITelemetryPlugin {
     if (!this._initialized) {
       let reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
         <IReactAISettings>settings.extensionConfig[this.identifier] : { debug: false };
-      this.debug = reactAISettings.debug;
+      ReactAI.debug = reactAISettings.debug || false;
       this.setContext(reactAISettings.initialContext || {}, true);
       extensions.forEach((ext, idx) => {
         if ((<ITelemetryPlugin>ext).identifier === ReactAI.ApplicationInsightsAnalyticsIdentifier) {
@@ -110,9 +111,6 @@ export default class ReactAI implements ITelemetryPlugin {
     this.debugLog("context is set to:", this.context);
   }
 
-  private contextProps: { [key: string]: any } = {};
-  private static debug?: boolean;
-
   private customDimensionsInitializer(): (item: ITelemetryItem) => boolean | void {
     return (envelope: ITelemetryItem) => {
       envelope.data = envelope.data || {};
@@ -139,7 +137,7 @@ export default class ReactAI implements ITelemetryPlugin {
   }
 
   private debugLog(message: string, payload?: any): void {
-    if (this.debug) {
+    if (ReactAI.isDebugMode) {
       console.log(`ReactAI: ${message}`, payload === undefined ? "" : payload);
     }
   }

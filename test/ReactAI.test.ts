@@ -32,12 +32,12 @@ describe("ReactAI", () => {
     init({});
     expect(reactAI).not.toBe(undefined);
     expect(appInsights).not.toBe(undefined);
-    expect(reactAI.isDebugMode).toBe(false);
+    expect(ReactAI.isDebugMode).toBe(false);
   });
 
   it("sets debug mode as expected", () => {
     init({ debug: true });
-    expect(reactAI.isDebugMode).toBe(true);
+    expect(ReactAI.isDebugMode).toBe(true);
   });
 
   it("sets context correctly", () => {
