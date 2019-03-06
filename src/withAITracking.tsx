@@ -3,13 +3,17 @@
 
 import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as React from "react";
-import { ReactAI } from ".";
+import ReactAIContainer from "./ReactAIContainer";
 
 export default function withAITracking<P>(Component: React.ComponentType<P>, componentName?: string): React.ComponentClass<P> {
 
   if (componentName === undefined || componentName === null || typeof componentName !== 'string') {
     componentName = Component.prototype.constructor.name;
   }
+
+  let container = ReactAIContainer.defaultReactAIContainer;
+  let ai = container.applicationInsights;
+  let reactAI = container.reactAI;
 
   return class extends React.Component<P> {
     private mountTimestamp: number = 0;
@@ -43,7 +47,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
         throw new Error("withAITracking:componentWillUnmount: mountTimestamp isn't initialized.");
       }
 
-      if (!ReactAI.rootInstance) {
+      if (!container || !ai) {
         throw new Error("withAITracking:componentWillUnmount: ReactAI isn't initialized yet.");
       }
 
@@ -68,7 +72,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
         "componentWillUnmount",
         `Tracking ${engagementTime} seconds of engagement time for ${componentName}.`
       );
-      ReactAI.rootInstance.trackMetric(metricData, additionalProperties);
+      ai.trackMetric(metricData, additionalProperties);
     }
 
     public render() {
@@ -103,7 +107,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
     }
 
     private debugLog(from: string, message: string): void {
-      if (ReactAI.isDebugMode) {
+      if (reactAI.isDebugMode) {
         console.log(`withAITracking:${componentName}:${from}: ${message}`, {
           engagementTime: this.getEngagementTimeSeconds(),
           firstActiveTime: this.firstActiveTimestamp,
