@@ -14,25 +14,25 @@ Javascript library to integrate [Application Insights][appinsights-js] in applic
 Using npm:
 
 ```bash
-npm install --save react-appinsights
+npm install react-appinsights
 ```
 
 ## Usage
 
-To initialize Application Insights add the following to the entry point
-file of your application (e.g. index.js):
+To initialize Application Insights, add the following to the entry point
+file of your application (e.g. `index.js`):
 
 ```javascript
 import { ReactAIContainer, ReactAI } from "react-appinsights";
 import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 
-let myReactAI = new ReactAI();
+let reactAI = new ReactAI();
 let appInsights = new ApplicationInsights({
   config: {
     instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
-    extensions: [myReactAI.extensionIdentifier],
+    extensions: [reactAI],
     extensionConfig: {
-      [ReactAI.extensionIdentifier]: { debug: false }
+      [ReactAI.extensionId]: { debug: false }
     }
   }
 });
@@ -44,13 +44,13 @@ ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, rea
 See [this Application Insights tutorial for Node.js][appinsights-nodejs]
 for more details on how to obtain the instrumentation key.
 
-`IReactAISettings` has following non-mandatory configuration options to be passed into the extensionConfig object:
+`IReactAISettings` has following non-mandatory configuration options to be passed into the `extensionConfig` object:
 
 ```typescript
 interface IReactAISettings {
-  initialContext?: { [key: string]: any }; // Initial context to initialize with
-  history?: History; // React router history - to enable page view tracking
-  debug?: boolean; // Debug mode: displays debug messages from ReactAI in console
+  initialContext?: { [key: string]: any };  // Initial context to initialize with
+  history?: History;                        // React router history - to enable page view tracking
+  debug?: boolean;                          // Debug mode: displays debug messages from ReactAI in console
 }
 ```
 
@@ -66,10 +66,12 @@ import { createBrowserHistory } from "history";
 
 const history = createBrowserHistory();
 
-In the code sample above, set configuration as follows:
-    extensionConfig: {
-      [ReactAI.extensionIdentifier]: { debug: false, history: history }
-    }
+/*
+ * In the code sample above, set configuration as follows:
+ *   extensionConfig: {
+ *     [ReactAI.extensionId]: { history: history }
+ *   }
+ */
 
 ReactDOM.render(
   <Router history={history}>
@@ -120,7 +122,7 @@ Please note that it can take up to 10 minutes for new custom metric to appear in
 To augment all telemetry with additional properties use `setContext` method. For instance:
 
 ```javascript
-myReactAI.setContext({ CorrelationId: "some-unique-correlation-id", Referrer: document.referrer });
+reactAI.setContext({ CorrelationId: "some-unique-correlation-id", Referrer: document.referrer });
 ```
 
 This will add CorrelationId and Referrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights.
@@ -137,32 +139,9 @@ var appInsights = ReactAIContainer.applicationInsights;
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights.
 
-## Advanced configuration
-
-The initialization function is an [intersection type][intersection-types] made of `IReactAISettings & IConfiguration & IConfig` - with `IReactAISettings` provided by the `ReactAI` library and rest of the configuration provided by [Application Insights][appinsights-js].
-
-Essentially, `instrumentationKey` is the only mandatory configuration option but initialization with intersection type allows you to leverage features of both libraries, as in the following example:
-
-```javascript
-ReactAI.initialize({
-  extensionConfig: {
-    [ReactAI.extensionIdentifier]: {
-      {
-        debug: true,
-        history: history
-      },
-  // AI specific config
-  instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
-  disableCorrelationHeaders: false,
-  disableFetchTracking: false,
-  enableCorsCorrelation: true,
-  isCookieUseDisabled: true
-});
-```
 
 [react]: https://reactjs.org/
 [appinsights-js]: https://docs.microsoft.com/en-us/azure/application-insights/app-insights-javascript
 [appinsights-nodejs]: https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/
 [appinsights-js-api]: https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md
 [react-router]: https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components
-[intersection-types]: https://www.typescriptlang.org/docs/handbook/advanced-types.html
