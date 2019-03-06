@@ -8,15 +8,16 @@ import * as React from "react";
 import { ReactAI, ReactAIContainer, withAITracking } from "../src";
 import { TestComponent } from "./TestComponent";
 
+const IKEY: string = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx";
 Enzyme.configure({ adapter: new Adapter.default() });
 
 describe("ReactAIContainer setup scenarios", () => {
-  it("When ReactAI is not one of extensions in appInsights, container setup throws", () => {
+  it("should throw an error when ReactAI is not set up as an extension of AppInsights", () => {
     expect(() => {
       let reactAI: ReactAI = new ReactAI();
       let appInsights = new ApplicationInsights({
         config: {
-          instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+          instrumentationKey: IKEY,
         }
       });
       appInsights.loadAppInsights();
@@ -25,12 +26,12 @@ describe("ReactAIContainer setup scenarios", () => {
     }).toThrowError("Input ReactAI extension is not one of extensions in appInsights instance");
   });
 
-  it("When ReactAI is invalid, container setup throws", () => {
+  it("should throw an error when ReactAI is not initialized", () => {
     expect(() => {
       let reactAI!: ReactAI;
       let appInsights = new ApplicationInsights({
         config: {
-          instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+          instrumentationKey: IKEY,
         }
       });
       appInsights.loadAppInsights();
@@ -39,7 +40,7 @@ describe("ReactAIContainer setup scenarios", () => {
     }).toThrowError("Invalid input for ReactAI");
   });
 
-  it("When ReactAI is invalid, container setup throws", () => {
+  it("should throw an error when AppInsights is not initialized", () => {
     expect(() => {
       let reactAI: ReactAI = new ReactAI();
       let appInsights!: ApplicationInsights;
@@ -49,19 +50,18 @@ describe("ReactAIContainer setup scenarios", () => {
   });
 });
 
-describe("<TestComponentWithTracking /> i.e. withAITracking(TestComponent)", () => {
+describe("withAITracking(TestComponent)", () => {
   let reactAI = new ReactAI();
   let appInsights = new ApplicationInsights({
     config: {
-      instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+      instrumentationKey: IKEY,
       extensions: [reactAI],
       extensionConfig: {
-        [ReactAI.extensionIdentifier]: { debug: false }
+        [ReactAI.extensionId]: { debug: false }
       }
     }
   });
   appInsights.loadAppInsights();
-
   ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
 
   const TestComponentWithTracking = withAITracking(TestComponent);
