@@ -13,10 +13,11 @@ import IReactAISettings from './IReactAISettings';
  * @class ReactAI
  */
 export default class ReactAI implements ITelemetryPlugin {
-  public static extensionIdentifier = "ApplicationInsightsReactUsage";
+
+  public static extensionId = "ApplicationInsightsReactUsage";
   public static ApplicationInsightsAnalyticsIdentifier = "ApplicationInsightsAnalytics";
   processTelemetry: (env: ITelemetryItem) => void;
-  public identifier = ReactAI.extensionIdentifier;
+  public identifier = ReactAI.extensionId;
   priority: number = 190;
   private _nextPlugin!: ITelemetryPlugin;
   private _initialized = false;
@@ -30,7 +31,6 @@ export default class ReactAI implements ITelemetryPlugin {
   public setNextPlugin(plugin: ITelemetryPlugin) {
     this._nextPlugin = plugin;
   }
-
 
   /**
    * Returns the current value of context/custom dimensions.
@@ -53,6 +53,7 @@ export default class ReactAI implements ITelemetryPlugin {
   public get isDebugMode(): boolean {
     return this.debug ? true : false;
   }
+
   /**
    * Initializes a singleton instance of ReactAI based on supplied parameters.
    *
