@@ -3,132 +3,79 @@
 
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import createHistory from "history/createBrowserHistory";
+import { IReactAISettings } from '../src';
 import ReactAI from "../src/ReactAI";
 
 const IKEY: string = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx";
 
-describe("ReactAI", () => {
-  beforeEach(() => {
-    jest.resetModules();
-  });
+let reactAI: ReactAI;
+let appInsights: ApplicationInsights;
 
-  it("initializes correctly", () => {
-    let reactAI = new ReactAI();
-    let appInsights = new ApplicationInsights({
+describe("ReactAI", () => {
+
+  function init(reactAIconfig: IReactAISettings) {
+    reactAI = new ReactAI();
+    reactAI._trackInitialPageViewInternal = jest.fn();
+    appInsights = new ApplicationInsights({
       config: {
         instrumentationKey: IKEY,
         extensions: [reactAI],
         extensionConfig: {
-          "[ReactAI.extensionIdentifier]": { debug: false }
+          [ReactAI.extensionId]: reactAIconfig
         }
       }
     });
     appInsights.loadAppInsights();
+  }
+
+  it("initializes correctly", () => {
+    init({});
     expect(reactAI).not.toBe(undefined);
     expect(appInsights).not.toBe(undefined);
+    expect(reactAI.isDebugMode).toBe(false);
   });
 
   it("sets debug mode as expected", () => {
-
-    let reactAI = new ReactAI();
-    let appInsights = new ApplicationInsights({
-      config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
-        extensionConfig: {
-          [ReactAI.extensionIdentifier]: { debug: true }
-        }
-      }
-    });
-    appInsights.loadAppInsights();
-
+    init({ debug: true });
     expect(reactAI.isDebugMode).toBe(true);
   });
 
   it("sets context correctly", () => {
-    let reactAI = new ReactAI();
-    let appInsights = new ApplicationInsights({
-      config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
-        extensionConfig: {
-          [ReactAI.extensionIdentifier]: { debug: false }
-        }
-      }
-    });
-    appInsights.loadAppInsights();
+    init({});
     reactAI.setContext({ prop1: "value1", prop2: "value2" });
     expect(reactAI.context.prop1).toBe("value1");
     expect(reactAI.context.prop2).toBe("value2");
   });
 
   it("resets context correctly", () => {
-    let reactAI = new ReactAI();
-    let appInsights = new ApplicationInsights({
-      config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
-        extensionConfig: {
-          [ReactAI.extensionIdentifier]: { debug: false }
-        }
-      }
-    });
-    appInsights.loadAppInsights();
+    init({});
     reactAI.setContext({ prop1: "value1" });
     expect(reactAI.context.prop1).toBe("value1");
-    reactAI.setContext({ prop3: "value3" }, true);
-    expect(reactAI.context.prop3).toBe("value3");
+
+    reactAI.setContext({ prop2: "value2" }, true);
+    expect(reactAI.context.prop2).toBe("value2");
     expect(reactAI.context.prop1).toBe(undefined);
   });
 
   it("resets context on initialization", () => {
-    let reactAI = new ReactAI();
-    let appInsights = new ApplicationInsights({
-      config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
-        extensionConfig: {
-          [ReactAI.extensionIdentifier]: { debug: false, initialContext: { prop1: "value1" } }
-        }
-      }
-    });
-    appInsights.loadAppInsights();
-
+    init({ initialContext: { prop1: "value1" } });
     expect(reactAI.context.prop1).toBe("value1");
     expect(reactAI.context.prop2).toBe(undefined);
-    expect(reactAI.context.prop3).toBe(undefined);
   });
 
   it("tracks page views", () => {
-
     const emulatedHistory = createHistory();
     const initialContext = { prop1: "value1" };
-    let reactAI = new ReactAI();
-    // Should call trackPageView upon initialization to track the view of the initial page
-    let appInsights = new ApplicationInsights({
-      config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
-        extensionConfig: {
-          [ReactAI.extensionIdentifier]: {
-            debug: false, initialContext: initialContext, history: emulatedHistory
-          }
-        }
-      }
-    });
-
-    reactAI._trackInitialPageViewInternal = jest.fn();
     jest.useFakeTimers();
-    appInsights.loadAppInsights();
-
-    const pageViewTelemetry1 = { uri: "/", properties: initialContext };
-    expect(reactAI._trackInitialPageViewInternal).toHaveBeenNthCalledWith(1, pageViewTelemetry1);
-
-    jest.restoreAllMocks();
+    init({ debug: false, initialContext: initialContext, history: emulatedHistory });
 
     // Mock the internal instance of AppInsights
     reactAI._aiInternal.trackPageView = jest.fn();
     reactAI._aiInternal.addTelemetryInitializer = jest.fn();
+
+    const pageViewTelemetry1 = { uri: "/", properties: initialContext };
+    expect(reactAI._trackInitialPageViewInternal).toHaveBeenCalledTimes(1);
+    expect(reactAI._trackInitialPageViewInternal).toHaveBeenNthCalledWith(1, pageViewTelemetry1);
 
     // Emulate navigation to different URL-addressed pages
     emulatedHistory.push("/home", { some: "state" });
