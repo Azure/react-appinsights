@@ -5,6 +5,13 @@ import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as React from "react";
 import ReactAIContainer from "./ReactAIContainer";
 
+/**
+ * Higher-order component function to hook Application Insights tracking 
+ * in a React component's lifecycle.
+ * 
+ * @param Component the component to be instrumented with Application Insights tracking
+ * @param componentName (optional) component name
+ */
 export default function withAITracking<P>(Component: React.ComponentType<P>, componentName?: string): React.ComponentClass<P> {
 
   if (componentName === undefined || componentName === null || typeof componentName !== 'string') {
@@ -48,7 +55,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
       }
 
       if (!container || !ai) {
-        throw new Error("withAITracking:componentWillUnmount: ReactAI isn't initialized yet.");
+        throw new Error("withAITracking:componentWillUnmount: ReactAI isn't initialized.");
       }
 
       if (this.intervalId) {
