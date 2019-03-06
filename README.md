@@ -23,14 +23,28 @@ To initialize Application Insights add the following to the entry point
 file of your application (e.g. index.js):
 
 ```javascript
-import { ReactAI } from "react-appinsights";
-ReactAI.initialize({ instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx" });
+import { ReactAIContainer, ReactAI } from "react-appinsights";
+import { ApplicationInsights } from "@microsoft/applicationinsights-web";
+
+let myReactAI = new ReactAI();
+let appInsights = new ApplicationInsights({
+  config: {
+    instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
+    extensions: [myReactAI.extensionIdentifier],
+    extensionConfig: {
+      [ReactAI.extensionIdentifier]: { debug: false }
+    }
+  }
+});
+
+appInsights.loadAppInsights();
+ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
 ```
 
 See [this Application Insights tutorial for Node.js][appinsights-nodejs]
 for more details on how to obtain the instrumentation key.
 
-In addition to `instrumentationKey`, `IReactAISettings` has following non-mandatory configuration options:
+`IReactAISettings` has following non-mandatory configuration options to be passed into the extensionConfig object:
 
 ```typescript
 interface IReactAISettings {
@@ -51,7 +65,11 @@ import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 const history = createBrowserHistory();
-ReactAI.init({ instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx", history: history });
+
+In the code sample above, set configuration as follows:
+    extensionConfig: {
+      [ReactAI.extensionIdentifier]: { debug: false, history: history }
+    }
 
 ReactDOM.render(
   <Router history={history}>
@@ -63,7 +81,7 @@ ReactDOM.render(
 
 #### Enable React components usage tracking
 
-To enable React components usage tracking, apply the `withAITracking` higher-order
+To instrument various React components usage tracking, apply the `withAITracking` higher-order
 component function.
 
 ```javascript
@@ -102,7 +120,7 @@ Please note that it can take up to 10 minutes for new custom metric to appear in
 To augment all telemetry with additional properties use `setContext` method. For instance:
 
 ```javascript
-ReactAI.setContext({ CorrelationId: "some-unique-correlation-id", Referrer: document.referrer });
+myReactAI.setContext({ CorrelationId: "some-unique-correlation-id", Referrer: document.referrer });
 ```
 
 This will add CorrelationId and Referrer property to all page views, ajax calls, exceptions and other telemetry sent to Application Insights.
@@ -114,7 +132,7 @@ This will add CorrelationId and Referrer property to all page views, ajax calls,
 Use the following method to get the original AppInsights object:
 
 ```javascript
-var appInsights = ReactAI.rootInstance;
+var appInsights = ReactAIContainer.applicationInsights;
 ```
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights.
@@ -127,11 +145,14 @@ Essentially, `instrumentationKey` is the only mandatory configuration option but
 
 ```javascript
 ReactAI.initialize({
-  // ReactAI config
-  instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
-  debug: true,
-  history: history,
+  extensionConfig: {
+    [ReactAI.extensionIdentifier]: {
+      {
+        debug: true,
+        history: history
+      },
   // AI specific config
+  instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
   disableCorrelationHeaders: false,
   disableFetchTracking: false,
   enableCorsCorrelation: true,
