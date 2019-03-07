@@ -3,7 +3,7 @@
 
 import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as React from "react";
-import { ReactAI } from ".";
+import ReactAI from "./ReactAI";
 
 /**
  * Higher-order component function to hook Application Insights tracking 
