@@ -22,7 +22,7 @@ export default class ReactAI implements ITelemetryPlugin {
   private _nextPlugin!: ITelemetryPlugin;
   private _initialized = false;
   public static debug: boolean = false;
-  public _aiInternal!: IApplicationInsights;
+  public static _aiInternal: IApplicationInsights;
   private contextProps: { [key: string]: any } = {};
 
   public constructor() {
@@ -64,12 +64,12 @@ export default class ReactAI implements ITelemetryPlugin {
   public initialize(settings: IReactAISettings & IConfiguration & IConfig, core: IAppInsightsCore, extensions: IPlugin[]): void {
     if (!this._initialized) {
       let reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
-        <IReactAISettings>settings.extensionConfig[this.identifier] : { debug: false };
+        settings.extensionConfig[this.identifier] as IReactAISettings : { debug: false };
       ReactAI.debug = reactAISettings.debug || false;
       this.setContext(reactAISettings.initialContext || {}, true);
       extensions.forEach((ext, idx) => {
-        if ((<ITelemetryPlugin>ext).identifier === ReactAI.ApplicationInsightsAnalyticsIdentifier) {
-          this._aiInternal = <any>ext;
+        if ((ext as ITelemetryPlugin).identifier === ReactAI.ApplicationInsightsAnalyticsIdentifier) {
+          ReactAI._aiInternal = <any>ext;
         }
       });
       if (reactAISettings.history) {
@@ -86,7 +86,7 @@ export default class ReactAI implements ITelemetryPlugin {
   public _trackInitialPageViewInternal(telemetry: IPageViewTelemetry) {
     // Record initial page view, since history.listen is not fired for the initial page
     // (see: https://github.com/ReactTraining/history/issues/479#issuecomment-307544999 )
-    this._aiInternal.trackPageView(telemetry);
+    ReactAI._aiInternal.trackPageView(telemetry);
     this.debugLog("recording initial page view.", `uri: ${location.pathname}`);
   }
 
@@ -129,7 +129,7 @@ export default class ReactAI implements ITelemetryPlugin {
         // Timeout to ensure any changes to the DOM made by route changes get included in pageView telemetry
         setTimeout(() => {
           const pageViewTelemetry: IPageViewTelemetry = { uri: location.pathname, properties: this.context };
-          this._aiInternal.trackPageView(pageViewTelemetry);
+          ReactAI._aiInternal.trackPageView(pageViewTelemetry);
           this.debugLog("recording page view.", `uri: ${location.pathname} action: ${action}`);
         }, 500);
       }
