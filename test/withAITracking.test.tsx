@@ -11,77 +11,66 @@ import { TestComponent } from "./TestComponent";
 const IKEY: string = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx";
 Enzyme.configure({ adapter: new Adapter.default() });
 
+let trackMetricSpy: jest.SpyInstance;
+let reactAI: ReactAI;
+let appInsights: ApplicationInsights;
+
 describe("withAITracking(TestComponent)", () => {
   const TestComponentWithTracking = withAITracking(TestComponent);
   const trackedTestComponentWrapper = () => Enzyme.shallow(<TestComponentWithTracking />);
+
+  beforeEach(() => {
+    reactAI = new ReactAI();
+    appInsights = new ApplicationInsights({
+      config: {
+        instrumentationKey: IKEY,
+        extensions: [reactAI],
+        extensionConfig: {
+          [ReactAI.extensionId]: { debug: false }
+        }
+      }
+    });
+    appInsights.loadAppInsights();
+    trackMetricSpy = jest.spyOn(ReactAI._aiInternal, "trackMetric");
+  });
 
   it("should wrap <TestComponent />", () => {
     const component = trackedTestComponentWrapper();
     expect(component.find(TestComponent).length).toBe(1);
   });
 
-  describe("When ReactAI is initialized", () => {
-    let trackMetricSpy: jest.SpyInstance;
-    let reactAI: ReactAI;
-    let appInsights: ApplicationInsights;
+  it("shouldn't call trackMetric if there's no user interaction", () => {
+    const component = trackedTestComponentWrapper();
+    component.unmount();
+    expect(trackMetricSpy).toHaveBeenCalledTimes(0);
+  });
 
-    beforeEach(() => {
-      jest.resetModules();
-      reactAI = new ReactAI();
-      appInsights = new ApplicationInsights({
-        config: {
-          instrumentationKey: IKEY,
-          extensions: [reactAI],
-          extensionConfig: {
-            [ReactAI.extensionId]: { debug: false }
-          }
-        }
-      });
-      appInsights.loadAppInsights();
-      trackMetricSpy = jest.spyOn(appInsights, "trackMetric");
-      trackMetricSpy.mockReset();
-    });
+  it("should call trackMetric if there is user interaction", () => {
+    const component = trackedTestComponentWrapper();
+    component.simulate("keydown");
+    component.unmount();
 
-    it("shouldn't call trackMetric if there's no user interaction", () => {
-      const TestComponentWithTracking = withAITracking(TestComponent);
-      const component = Enzyme.shallow(<TestComponentWithTracking />);
-      component.unmount();
-      expect(trackMetricSpy).toHaveBeenCalledTimes(0);
-    });
+    expect(trackMetricSpy).toHaveBeenCalledTimes(1);
+    const metricTelemetry: IMetricTelemetry = {
+      average: expect.any(Number),
+      name: "React Component Engaged Time (seconds)",
+      sampleCount: 1
+    };
+    expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "TestComponent" });
+  });
 
-    it("should call trackMetric if there is user interaction", () => {
-      const TestComponentWithTracking = withAITracking(TestComponent);
-      const component = Enzyme.shallow(<TestComponentWithTracking />);
-      //const component = trackedTestComponentWrapper();
-      component.simulate("keydown");
-      component.unmount();
+  it("should use the passed component name in trackMetric", () => {
+    const TestComponentWithTrackingCustomName = withAITracking(TestComponent, "MyCustomName");
+    const component = Enzyme.shallow(<TestComponentWithTrackingCustomName />);
+    component.simulate("mousemove");
+    component.unmount();
 
-      expect(trackMetricSpy).toHaveBeenCalledTimes(1);
-
-      const metricTelemetry: IMetricTelemetry = {
-        average: expect.any(Number),
-        name: "React Component Engaged Time (seconds)",
-        sampleCount: 1
-      };
-
-      expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "TestComponent" });
-    });
-
-    it("should use the passed component name in trackMetric", () => {
-      const TestComponentWithTrackingCustomName = withAITracking(TestComponent, "MyCustomName");
-      const component = Enzyme.shallow(<TestComponentWithTrackingCustomName />);
-      component.simulate("mousemove");
-      component.unmount();
-
-      expect(trackMetricSpy).toHaveBeenCalledTimes(1);
-
-      const metricTelemetry: IMetricTelemetry = {
-        average: expect.any(Number),
-        name: "React Component Engaged Time (seconds)",
-        sampleCount: 1
-      };
-
-      expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "MyCustomName" });
-    });
+    expect(trackMetricSpy).toHaveBeenCalledTimes(1);
+    const metricTelemetry: IMetricTelemetry = {
+      average: expect.any(Number),
+      name: "React Component Engaged Time (seconds)",
+      sampleCount: 1
+    };
+    expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "MyCustomName" });
   });
 });
