@@ -23,7 +23,7 @@ To initialize Application Insights, add the following to the entry point
 file of your application (e.g. `index.js`):
 
 ```javascript
-import { ReactAIContainer, ReactAI } from "react-appinsights";
+import { ReactAI } from "react-appinsights";
 import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 
 let reactAI = new ReactAI();
@@ -36,9 +36,7 @@ let appInsights = new ApplicationInsights({
     }
   }
 });
-
 appInsights.loadAppInsights();
-ReactAIContainer.defaultReactAIContainer = new ReactAIContainer(appInsights, reactAI);
 ```
 
 See [this Application Insights tutorial for Node.js][appinsights-nodejs]
@@ -134,7 +132,7 @@ This will add CorrelationId and Referrer property to all page views, ajax calls,
 Use the following method to get the original AppInsights object:
 
 ```javascript
-var appInsights = ReactAIContainer.applicationInsights;
+var appInsights = ReactAI._aiInternal;
 ```
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights.
