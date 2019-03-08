@@ -132,7 +132,7 @@ This will add CorrelationId and Referrer property to all page views, ajax calls,
 Use the following method to get the original AppInsights object:
 
 ```javascript
-var appInsights = ReactAI._aiInternal;
+var appInsights = ReactAI.appInsights;
 ```
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights.
