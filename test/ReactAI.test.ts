@@ -32,12 +32,12 @@ describe("ReactAI", () => {
     init({});
     expect(reactAI).not.toBe(undefined);
     expect(appInsights).not.toBe(undefined);
-    expect(reactAI.isDebugMode).toBe(false);
+    expect(ReactAI.isDebugMode).toBe(false);
   });
 
   it("sets debug mode as expected", () => {
     init({ debug: true });
-    expect(reactAI.isDebugMode).toBe(true);
+    expect(ReactAI.isDebugMode).toBe(true);
   });
 
   it("sets context correctly", () => {
@@ -70,8 +70,8 @@ describe("ReactAI", () => {
     init({ debug: false, initialContext: initialContext, history: emulatedHistory });
 
     // Mock the internal instance of AppInsights
-    reactAI._aiInternal.trackPageView = jest.fn();
-    reactAI._aiInternal.addTelemetryInitializer = jest.fn();
+    ReactAI.appInsights.trackPageView = jest.fn();
+    ReactAI.appInsights.addTelemetryInitializer = jest.fn();
 
     const pageViewTelemetry1 = { uri: "/", properties: initialContext };
     expect(reactAI._trackInitialPageViewInternal).toHaveBeenCalledTimes(1);
@@ -84,8 +84,8 @@ describe("ReactAI", () => {
 
     const pageViewTelemetry2 = { uri: "/home", properties: initialContext };
     const pageViewTelemetry3 = { uri: "/new-fancy-page", properties: initialContext };
-    expect(reactAI._aiInternal.trackPageView).toHaveBeenCalledTimes(2);
-    expect(reactAI._aiInternal.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry2);
-    expect(reactAI._aiInternal.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry3);
+    expect(ReactAI.appInsights.trackPageView).toHaveBeenCalledTimes(2);
+    expect(ReactAI.appInsights.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry2);
+    expect(ReactAI.appInsights.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry3);
   });
 });
