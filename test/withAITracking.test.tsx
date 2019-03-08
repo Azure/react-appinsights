@@ -23,11 +23,11 @@ describe("withAITracking(TestComponent)", () => {
     reactAI = new ReactAI();
     appInsights = new ApplicationInsights({
       config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
         extensionConfig: {
           [ReactAI.extensionId]: { debug: false }
-        }
+        },
+        extensions: [reactAI],
+        instrumentationKey: IKEY
       }
     });
     appInsights.loadAppInsights();
