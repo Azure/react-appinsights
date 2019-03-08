@@ -31,7 +31,7 @@ describe("withAITracking(TestComponent)", () => {
       }
     });
     appInsights.loadAppInsights();
-    trackMetricSpy = jest.spyOn(ReactAI._aiInternal, "trackMetric");
+    trackMetricSpy = jest.spyOn(ReactAI.appInsights, "trackMetric");
   });
 
   it("should wrap <TestComponent />", () => {
