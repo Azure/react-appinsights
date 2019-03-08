@@ -18,11 +18,11 @@ describe("ReactAI", () => {
     reactAI._trackInitialPageViewInternal = jest.fn();
     appInsights = new ApplicationInsights({
       config: {
-        instrumentationKey: IKEY,
-        extensions: [reactAI],
         extensionConfig: {
           [ReactAI.extensionId]: reactAIconfig
-        }
+        },
+        extensions: [reactAI],
+        instrumentationKey: IKEY
       }
     });
     appInsights.loadAppInsights();
@@ -67,7 +67,7 @@ describe("ReactAI", () => {
     const emulatedHistory = createHistory();
     const initialContext = { prop1: "value1" };
     jest.useFakeTimers();
-    init({ debug: false, initialContext: initialContext, history: emulatedHistory });
+    init({ debug: false, initialContext, history: emulatedHistory });
 
     // Mock the internal instance of AppInsights
     ReactAI.appInsights.trackPageView = jest.fn();

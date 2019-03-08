@@ -14,15 +14,16 @@ import IReactAISettings from './IReactAISettings';
  */
 export default class ReactAI implements ITelemetryPlugin {
 
+  public static appInsights: IApplicationInsights;
+  public static debug: boolean = false;
+
   public static extensionId = "ApplicationInsightsReactUsage";
   public static ApplicationInsightsAnalyticsIdentifier = "ApplicationInsightsAnalytics";
-  processTelemetry: (env: ITelemetryItem) => void;
+  public processTelemetry: (env: ITelemetryItem) => void;
   public identifier = ReactAI.extensionId;
-  priority: number = 190;
-  private _nextPlugin!: ITelemetryPlugin;
-  private _initialized = false;
-  public static debug: boolean = false;
-  public static appInsights: IApplicationInsights;
+  public priority: number = 190;
+  private nextPlugin!: ITelemetryPlugin;
+  private initialized = false;
   private contextProps: { [key: string]: any } = {};
 
   public constructor() {
@@ -30,7 +31,7 @@ export default class ReactAI implements ITelemetryPlugin {
   }
 
   public setNextPlugin(plugin: ITelemetryPlugin) {
-    this._nextPlugin = plugin;
+    this.nextPlugin = plugin;
   }
 
   /**
@@ -62,14 +63,14 @@ export default class ReactAI implements ITelemetryPlugin {
    * @memberof ReactAI
    */
   public initialize(settings: IReactAISettings & IConfiguration & IConfig, core: IAppInsightsCore, extensions: IPlugin[]): void {
-    if (!this._initialized) {
-      let reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
+    if (!this.initialized) {
+      const reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
         settings.extensionConfig[this.identifier] as IReactAISettings : { debug: false };
       ReactAI.debug = reactAISettings.debug || false;
       this.setContext(reactAISettings.initialContext || {}, true);
       extensions.forEach((ext, idx) => {
         if ((ext as ITelemetryPlugin).identifier === ReactAI.ApplicationInsightsAnalyticsIdentifier) {
-          ReactAI.appInsights = <any>ext;
+          ReactAI.appInsights = ext as any;
         }
       });
       if (reactAISettings.history) {
@@ -78,7 +79,7 @@ export default class ReactAI implements ITelemetryPlugin {
         this._trackInitialPageViewInternal(pageViewTelemetry);
       }
 
-      this._initialized = true;
+      this.initialized = true;
     }
   }
 
