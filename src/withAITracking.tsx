@@ -50,7 +50,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
         throw new Error("withAITracking:componentWillUnmount: mountTimestamp isn't initialized.");
       }
 
-      if (!(ReactAI as any)._aiInternal) {
+      if (!ReactAI.appInsights) {
         throw new Error("withAITracking:componentWillUnmount: ReactAI isn't initialized.");
       }
 
@@ -75,7 +75,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
         "componentWillUnmount",
         `Tracking ${engagementTime} seconds of engagement time for ${componentName}.`
       );
-      (ReactAI as any)._aiInternal.trackMetric(metricData, additionalProperties);
+      ReactAI.appInsights.trackMetric(metricData, additionalProperties);
     }
 
     public render() {
