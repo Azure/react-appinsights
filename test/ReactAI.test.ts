@@ -3,23 +3,20 @@
 
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import createHistory from "history/createBrowserHistory";
-import { IReactAISettings } from '../src';
-import ReactAI from "../src/ReactAI";
+import { IReactAISettings, reactAI } from '../src';
 
 const IKEY: string = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx";
 
-let reactAI: ReactAI;
 let appInsights: ApplicationInsights;
 
 describe("ReactAI", () => {
 
   function init(reactAIconfig: IReactAISettings) {
-    reactAI = new ReactAI();
     reactAI._trackInitialPageViewInternal = jest.fn();
     appInsights = new ApplicationInsights({
       config: {
         extensionConfig: {
-          [ReactAI.extensionId]: reactAIconfig
+          [reactAI.extensionId]: reactAIconfig
         },
         extensions: [reactAI],
         instrumentationKey: IKEY
@@ -32,12 +29,12 @@ describe("ReactAI", () => {
     init({});
     expect(reactAI).not.toBe(undefined);
     expect(appInsights).not.toBe(undefined);
-    expect(ReactAI.isDebugMode).toBe(false);
+    expect(reactAI.isDebugMode).toBe(false);
   });
 
   it("sets debug mode as expected", () => {
     init({ debug: true });
-    expect(ReactAI.isDebugMode).toBe(true);
+    expect(reactAI.isDebugMode).toBe(true);
   });
 
   it("sets context correctly", () => {
@@ -70,8 +67,8 @@ describe("ReactAI", () => {
     init({ debug: false, initialContext, history: emulatedHistory });
 
     // Mock the internal instance of AppInsights
-    ReactAI.appInsights.trackPageView = jest.fn();
-    ReactAI.appInsights.addTelemetryInitializer = jest.fn();
+    reactAI.appInsights.trackPageView = jest.fn();
+    reactAI.appInsights.addTelemetryInitializer = jest.fn();
 
     const pageViewTelemetry1 = { uri: "/", properties: initialContext };
     expect(reactAI._trackInitialPageViewInternal).toHaveBeenCalledTimes(1);
@@ -84,8 +81,8 @@ describe("ReactAI", () => {
 
     const pageViewTelemetry2 = { uri: "/home", properties: initialContext };
     const pageViewTelemetry3 = { uri: "/new-fancy-page", properties: initialContext };
-    expect(ReactAI.appInsights.trackPageView).toHaveBeenCalledTimes(2);
-    expect(ReactAI.appInsights.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry2);
-    expect(ReactAI.appInsights.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry3);
+    expect(reactAI.appInsights.trackPageView).toHaveBeenCalledTimes(2);
+    expect(reactAI.appInsights.trackPageView).toHaveBeenNthCalledWith(1, pageViewTelemetry2);
+    expect(reactAI.appInsights.trackPageView).toHaveBeenNthCalledWith(2, pageViewTelemetry3);
   });
 });

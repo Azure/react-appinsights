@@ -12,19 +12,18 @@ import IReactAISettings from './IReactAISettings';
  * @export
  * @class ReactAI
  */
-export default class ReactAI implements ITelemetryPlugin {
+class ReactAI implements ITelemetryPlugin {
 
-  public static appInsights: IApplicationInsights;
-  public static debug: boolean = false;
-
-  public static extensionId = "ApplicationInsightsReactUsage";
-  public static ApplicationInsightsAnalyticsIdentifier = "ApplicationInsightsAnalytics";
+  public extensionId: string = "ApplicationInsightsReactUsage";
+  public ApplicationInsightsAnalyticsIdentifier: string = "ApplicationInsightsAnalytics";
   public processTelemetry: (env: ITelemetryItem) => void;
-  public identifier = ReactAI.extensionId;
+  public identifier = this.extensionId;
   public priority: number = 190;
+  public appInsights!: IApplicationInsights;
+
   private nextPlugin!: ITelemetryPlugin;
-  private initialized = false;
   private contextProps: { [key: string]: any } = {};
+  private _debug: boolean = false;
 
   public constructor() {
     this.processTelemetry = this.customDimensionsInitializer.bind(this);
@@ -52,8 +51,8 @@ export default class ReactAI implements ITelemetryPlugin {
    * @type {boolean}
    * @memberof ReactAI
    */
-  public static get isDebugMode(): boolean {
-    return ReactAI.debug;
+  public get isDebugMode(): boolean {
+    return this._debug;
   }
 
   /**
@@ -63,23 +62,19 @@ export default class ReactAI implements ITelemetryPlugin {
    * @memberof ReactAI
    */
   public initialize(settings: IReactAISettings & IConfiguration & IConfig, core: IAppInsightsCore, extensions: IPlugin[]): void {
-    if (!this.initialized) {
-      const reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
-        settings.extensionConfig[this.identifier] as IReactAISettings : { debug: false };
-      ReactAI.debug = reactAISettings.debug || false;
-      this.setContext(reactAISettings.initialContext || {}, true);
-      extensions.forEach((ext, idx) => {
-        if ((ext as ITelemetryPlugin).identifier === ReactAI.ApplicationInsightsAnalyticsIdentifier) {
-          ReactAI.appInsights = ext as any;
-        }
-      });
-      if (reactAISettings.history) {
-        this.addHistoryListener(reactAISettings.history);
-        const pageViewTelemetry: IPageViewTelemetry = { uri: reactAISettings.history.location.pathname, properties: this.context };
-        this._trackInitialPageViewInternal(pageViewTelemetry);
+    const reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
+      settings.extensionConfig[this.identifier] as IReactAISettings : { debug: false };
+    this._debug = reactAISettings.debug || false;
+    this.setContext(reactAISettings.initialContext || {}, true);
+    extensions.forEach((ext, idx) => {
+      if ((ext as ITelemetryPlugin).identifier === this.ApplicationInsightsAnalyticsIdentifier) {
+        this.appInsights = ext as any;
       }
-
-      this.initialized = true;
+    });
+    if (reactAISettings.history) {
+      this.addHistoryListener(reactAISettings.history);
+      const pageViewTelemetry: IPageViewTelemetry = { uri: reactAISettings.history.location.pathname, properties: this.context };
+      this._trackInitialPageViewInternal(pageViewTelemetry);
     }
   }
 
@@ -87,7 +82,7 @@ export default class ReactAI implements ITelemetryPlugin {
   public _trackInitialPageViewInternal(telemetry: IPageViewTelemetry) {
     // Record initial page view, since history.listen is not fired for the initial page
     // (see: https://github.com/ReactTraining/history/issues/479#issuecomment-307544999 )
-    ReactAI.appInsights.trackPageView(telemetry);
+    this.appInsights.trackPageView(telemetry);
     this.debugLog("recording initial page view.", `uri: ${location.pathname}`);
   }
 
@@ -130,7 +125,7 @@ export default class ReactAI implements ITelemetryPlugin {
         // Timeout to ensure any changes to the DOM made by route changes get included in pageView telemetry
         setTimeout(() => {
           const pageViewTelemetry: IPageViewTelemetry = { uri: location.pathname, properties: this.context };
-          ReactAI.appInsights.trackPageView(pageViewTelemetry);
+          this.appInsights.trackPageView(pageViewTelemetry);
           this.debugLog("recording page view.", `uri: ${location.pathname} action: ${action}`);
         }, 500);
       }
@@ -138,8 +133,10 @@ export default class ReactAI implements ITelemetryPlugin {
   }
 
   private debugLog(message: string, payload?: any): void {
-    if (ReactAI.isDebugMode) {
+    if (this.isDebugMode) {
       console.log(`ReactAI: ${message}`, payload === undefined ? "" : payload);
     }
   }
 }
+
+export const reactAI = new ReactAI();

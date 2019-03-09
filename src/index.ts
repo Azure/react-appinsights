@@ -2,8 +2,8 @@
 // Licensed under the MIT License.
 
 import IReactAISettings from "./IReactAISettings";
-import ReactAI from "./ReactAI";
+import { reactAI } from "./ReactAI";
 import withAITracking from "./withAITracking";
 
-export { ReactAI, IReactAISettings, withAITracking };
+export { reactAI, IReactAISettings, withAITracking };
 
