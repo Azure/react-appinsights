@@ -23,16 +23,15 @@ To initialize Application Insights, add the following to the entry point
 file of your application (e.g. `index.js`):
 
 ```javascript
-import { ReactAI } from "react-appinsights";
+import { reactAI } from "react-appinsights";
 import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 
-let reactAI = new ReactAI();
 let appInsights = new ApplicationInsights({
   config: {
     instrumentationKey: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx",
     extensions: [reactAI],
     extensionConfig: {
-      [ReactAI.extensionId]: { debug: false }
+      [reactAI.extensionId]: { debug: false }
     }
   }
 });
@@ -58,7 +57,8 @@ To track page views, pass a history object to the init method.
 For more information see the [documentation][react-router] of the `react-router` package.
 
 ```javascript
-import ReactAI from "react-appinsights";
+import { reactAI } from "react-appinsights";
+import { ApplicationInsights } from "@microsoft/applicationinsights-web";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
@@ -132,7 +132,7 @@ This will add CorrelationId and Referrer property to all page views, ajax calls,
 Use the following method to get the original AppInsights object:
 
 ```javascript
-var appInsights = ReactAI.appInsights;
+var appInsights = reactAI.appInsights;
 ```
 
 Refer to [this doc][appinsights-js-api] for information on the Javascript API of Application Insights.

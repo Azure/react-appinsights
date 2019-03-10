@@ -3,7 +3,7 @@
 
 import { IMetricTelemetry } from "@microsoft/applicationinsights-web";
 import * as React from "react";
-import ReactAI from "./ReactAI";
+import { reactAI } from "./ReactAI";
 
 /**
  * Higher-order component function to hook Application Insights tracking 
@@ -50,7 +50,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
         throw new Error("withAITracking:componentWillUnmount: mountTimestamp isn't initialized.");
       }
 
-      if (!ReactAI.appInsights) {
+      if (!reactAI.appInsights) {
         throw new Error("withAITracking:componentWillUnmount: ReactAI isn't initialized.");
       }
 
@@ -75,7 +75,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
         "componentWillUnmount",
         `Tracking ${engagementTime} seconds of engagement time for ${componentName}.`
       );
-      ReactAI.appInsights.trackMetric(metricData, additionalProperties);
+      reactAI.appInsights.trackMetric(metricData, additionalProperties);
     }
 
     public render() {
@@ -110,7 +110,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
     }
 
     private debugLog(from: string, message: string): void {
-      if (ReactAI.isDebugMode) {
+      if (reactAI.isDebugMode) {
         console.log(`withAITracking:${componentName}:${from}: ${message}`, {
           engagementTime: this.getEngagementTimeSeconds(),
           firstActiveTime: this.firstActiveTimestamp,

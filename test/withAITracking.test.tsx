@@ -5,14 +5,13 @@ import { ApplicationInsights, IMetricTelemetry } from "@microsoft/applicationins
 import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
-import { ReactAI, withAITracking } from "../src";
+import { reactAI, withAITracking } from "../src";
 import { TestComponent } from "./TestComponent";
 
 const IKEY: string = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx";
 Enzyme.configure({ adapter: new Adapter.default() });
 
 let trackMetricSpy: jest.SpyInstance;
-let reactAI: ReactAI;
 let appInsights: ApplicationInsights;
 
 describe("withAITracking(TestComponent)", () => {
@@ -20,18 +19,17 @@ describe("withAITracking(TestComponent)", () => {
   const trackedTestComponentWrapper = () => Enzyme.shallow(<TestComponentWithTracking />);
 
   beforeEach(() => {
-    reactAI = new ReactAI();
     appInsights = new ApplicationInsights({
       config: {
         extensionConfig: {
-          [ReactAI.extensionId]: { debug: false }
+          [reactAI.extensionId]: { debug: false }
         },
         extensions: [reactAI],
         instrumentationKey: IKEY
       }
     });
     appInsights.loadAppInsights();
-    trackMetricSpy = jest.spyOn(ReactAI.appInsights, "trackMetric");
+    trackMetricSpy = jest.spyOn(reactAI.appInsights, "trackMetric");
   });
 
   it("should wrap <TestComponent />", () => {
