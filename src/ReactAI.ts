@@ -1,10 +1,18 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { IPlugin } from '@microsoft/applicationinsights-core-js';
-import { IAppInsightsCore, IApplicationInsights, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem, ITelemetryPlugin } from "@microsoft/applicationinsights-web";
+import { IPlugin } from "@microsoft/applicationinsights-core-js";
+import {
+  IAppInsightsCore,
+  IApplicationInsights,
+  IConfig,
+  IConfiguration,
+  IPageViewTelemetry,
+  ITelemetryItem,
+  ITelemetryPlugin
+} from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
-import IReactAISettings from './IReactAISettings';
+import IReactAISettings from "./IReactAISettings";
 
 /**
  * Module to include Microsoft Application Insights in React applications.
@@ -13,7 +21,6 @@ import IReactAISettings from './IReactAISettings';
  * @class ReactAI
  */
 class ReactAI implements ITelemetryPlugin {
-
   public extensionId: string = "ApplicationInsightsReactUsage";
   public ApplicationInsightsAnalyticsIdentifier: string = "ApplicationInsightsAnalytics";
   public processTelemetry: (env: ITelemetryItem) => void;
@@ -23,7 +30,7 @@ class ReactAI implements ITelemetryPlugin {
 
   private nextPlugin!: ITelemetryPlugin;
   private contextProps: { [key: string]: any } = {};
-  private _debug: boolean = false;
+  private debug: boolean = false;
 
   public constructor() {
     this.processTelemetry = this.customDimensionsInitializer.bind(this);
@@ -52,7 +59,7 @@ class ReactAI implements ITelemetryPlugin {
    * @memberof ReactAI
    */
   public get isDebugMode(): boolean {
-    return this._debug;
+    return this.debug;
   }
 
   /**
@@ -61,10 +68,16 @@ class ReactAI implements ITelemetryPlugin {
    * @param {IReactAISettings} settings
    * @memberof ReactAI
    */
-  public initialize(settings: IReactAISettings & IConfiguration & IConfig, core: IAppInsightsCore, extensions: IPlugin[]): void {
-    const reactAISettings = settings.extensionConfig && settings.extensionConfig[this.identifier] ?
-      settings.extensionConfig[this.identifier] as IReactAISettings : { debug: false };
-    this._debug = reactAISettings.debug || false;
+  public initialize(
+    settings: IReactAISettings & IConfiguration & IConfig,
+    core: IAppInsightsCore,
+    extensions: IPlugin[]
+  ): void {
+    const reactAISettings =
+      settings.extensionConfig && settings.extensionConfig[this.identifier]
+        ? (settings.extensionConfig[this.identifier] as IReactAISettings)
+        : { debug: false };
+    this.debug = reactAISettings.debug || false;
     this.setContext(reactAISettings.initialContext || {}, true);
     extensions.forEach((ext, idx) => {
       if ((ext as ITelemetryPlugin).identifier === this.ApplicationInsightsAnalyticsIdentifier) {
@@ -73,7 +86,10 @@ class ReactAI implements ITelemetryPlugin {
     });
     if (reactAISettings.history) {
       this.addHistoryListener(reactAISettings.history);
-      const pageViewTelemetry: IPageViewTelemetry = { uri: reactAISettings.history.location.pathname, properties: this.context };
+      const pageViewTelemetry: IPageViewTelemetry = {
+        uri: reactAISettings.history.location.pathname,
+        properties: this.context
+      };
       this._trackInitialPageViewInternal(pageViewTelemetry);
     }
   }
