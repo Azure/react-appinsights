@@ -125,11 +125,13 @@ class ReactAI implements ITelemetryPlugin {
 
   private customDimensionsInitializer(): (item: ITelemetryItem) => boolean | void {
     return (envelope: ITelemetryItem) => {
-      envelope.data = envelope.data || {};
+      envelope.baseData = envelope.baseData || {};
+      envelope.baseData.properties = envelope.baseData.properties || {};
+      const properties = envelope.baseData.properties;
       const props = this.context;
       for (const key in props) {
         if (props.hasOwnProperty(key)) {
-          envelope.data[key] = props[key];
+          properties[key] = props[key];
         }
       }
     };
