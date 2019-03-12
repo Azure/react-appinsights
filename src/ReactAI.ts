@@ -1,24 +1,18 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
+import { PropertiesPluginIdentifier } from "@microsoft/applicationinsights-common";
 import { IPlugin } from "@microsoft/applicationinsights-core-js";
-import {
-  IAppInsightsCore,
-  IApplicationInsights,
-  IConfig,
-  IConfiguration,
-  IPageViewTelemetry,
-  ITelemetryItem,
-  ITelemetryPlugin
-} from "@microsoft/applicationinsights-web";
+import { ApplicationInsights as AppInsightsPlugin, IAppInsightsCore, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem, ITelemetryPlugin, PropertiesPlugin } from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
 import IReactAISettings from "./IReactAISettings";
+
 
 /**
  * Module to include Microsoft Application Insights in React applications.
  *
  * @export
- * @class ReactAI
+ * @class ReactAI  
  */
 class ReactAI implements ITelemetryPlugin {
   public extensionId: string = "ApplicationInsightsReactUsage";
@@ -26,7 +20,8 @@ class ReactAI implements ITelemetryPlugin {
   public processTelemetry: (env: ITelemetryItem) => void;
   public identifier = this.extensionId;
   public priority: number = 190;
-  public appInsights!: IApplicationInsights;
+  public appInsights!: AppInsightsPlugin;
+  private propertiesPlugin: PropertiesPlugin;
 
   private nextPlugin!: ITelemetryPlugin;
   private contextProps: { [key: string]: any } = {};
@@ -79,9 +74,14 @@ class ReactAI implements ITelemetryPlugin {
         : { debug: false };
     this.debug = reactAISettings.debug || false;
     this.setContext(reactAISettings.initialContext || {}, true);
-    extensions.forEach((ext, idx) => {
-      if ((ext as ITelemetryPlugin).identifier === this.ApplicationInsightsAnalyticsIdentifier) {
-        this.appInsights = ext as any;
+    extensions.forEach((ext) => {
+      let identifier = (ext as ITelemetryPlugin).identifier;
+      if (identifier === this.ApplicationInsightsAnalyticsIdentifier) {
+        this.appInsights = ext as AppInsightsPlugin;
+      }
+
+      if (identifier === PropertiesPluginIdentifier) {
+        this.propertiesPlugin = ext as PropertiesPlugin;
       }
     });
     if (reactAISettings.history) {
