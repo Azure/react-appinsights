@@ -21,7 +21,7 @@ class ReactAI implements ITelemetryPlugin {
   public identifier = this.extensionId;
   public priority: number = 190;
   public appInsights!: AppInsightsPlugin;
-  private propertiesPlugin: PropertiesPlugin;
+  private propertiesPlugin!: PropertiesPlugin;
 
   private nextPlugin!: ITelemetryPlugin;
   private contextProps: { [key: string]: any } = {};
@@ -77,11 +77,11 @@ class ReactAI implements ITelemetryPlugin {
     extensions.forEach((ext) => {
       let identifier = (ext as ITelemetryPlugin).identifier;
       if (identifier === this.ApplicationInsightsAnalyticsIdentifier) {
-        this.appInsights = ext as AppInsightsPlugin;
+        this.appInsights = (<any>ext) as AppInsightsPlugin;
       }
 
       if (identifier === PropertiesPluginIdentifier) {
-        this.propertiesPlugin = ext as PropertiesPlugin;
+        this.propertiesPlugin = (<any>ext) as PropertiesPlugin;
       }
     });
     if (reactAISettings.history) {
