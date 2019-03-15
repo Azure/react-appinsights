@@ -3,16 +3,24 @@
 
 import { PropertiesPluginIdentifier } from "@microsoft/applicationinsights-common";
 import { IPlugin } from "@microsoft/applicationinsights-core-js";
-import { ApplicationInsights as AppInsightsPlugin, IAppInsightsCore, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem, ITelemetryPlugin, PropertiesPlugin } from "@microsoft/applicationinsights-web";
+import {
+  ApplicationInsights as AppInsightsPlugin,
+  IAppInsightsCore,
+  IConfig,
+  IConfiguration,
+  IPageViewTelemetry,
+  ITelemetryItem,
+  ITelemetryPlugin,
+  PropertiesPlugin
+} from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
 import IReactAISettings from "./IReactAISettings";
-
 
 /**
  * Module to include Microsoft Application Insights in React applications.
  *
  * @export
- * @class ReactAI  
+ * @class ReactAI
  */
 class ReactAI implements ITelemetryPlugin {
   public extensionId: string = "ApplicationInsightsReactUsage";
@@ -74,7 +82,7 @@ class ReactAI implements ITelemetryPlugin {
         : { debug: false };
     this.debug = reactAISettings.debug || false;
     this.setContext(reactAISettings.initialContext || {}, true);
-    extensions.forEach((ext) => {
+    extensions.forEach(ext => {
       let identifier = (ext as ITelemetryPlugin).identifier;
       if (identifier === this.ApplicationInsightsAnalyticsIdentifier) {
         this.appInsights = (<any>ext) as AppInsightsPlugin;
@@ -133,6 +141,9 @@ class ReactAI implements ITelemetryPlugin {
         if (props.hasOwnProperty(key)) {
           properties[key] = props[key];
         }
+      }
+      if (this.nextPlugin != null) {
+        this.nextPlugin.processTelemetry(envelope);
       }
     };
   }
