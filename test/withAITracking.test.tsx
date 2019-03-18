@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { ApplicationInsights, IMetricTelemetry } from "@microsoft/applicationinsights-web";
+import { ApplicationInsights, IMetricTelemetry, IPageViewTelemetry } from "@microsoft/applicationinsights-web";
 import * as Enzyme from "enzyme";
 import * as Adapter from "enzyme-adapter-react-16";
 import * as React from "react";
@@ -49,9 +49,10 @@ describe("withAITracking(TestComponent)", () => {
     component.unmount();
 
     expect(trackMetricSpy).toHaveBeenCalledTimes(1);
-    const metricTelemetry: IMetricTelemetry = {
+    const metricTelemetry: IMetricTelemetry & IPageViewTelemetry = {
       average: expect.any(Number),
       name: "React Component Engaged Time (seconds)",
+      properties: expect.any(Object),
       sampleCount: 1
     };
     expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "TestComponent" });
@@ -64,9 +65,10 @@ describe("withAITracking(TestComponent)", () => {
     component.unmount();
 
     expect(trackMetricSpy).toHaveBeenCalledTimes(1);
-    const metricTelemetry: IMetricTelemetry = {
+    const metricTelemetry: IMetricTelemetry & IPageViewTelemetry = {
       average: expect.any(Number),
       name: "React Component Engaged Time (seconds)",
+      properties: expect.any(Object),
       sampleCount: 1
     };
     expect(trackMetricSpy).toHaveBeenCalledWith(metricTelemetry, { "Component Name": "MyCustomName" });
