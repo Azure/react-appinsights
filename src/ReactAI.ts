@@ -3,16 +3,7 @@
 
 import { PropertiesPluginIdentifier } from "@microsoft/applicationinsights-common";
 import { IPlugin } from "@microsoft/applicationinsights-core-js";
-import {
-  ApplicationInsights as AppInsightsPlugin,
-  IAppInsightsCore,
-  IConfig,
-  IConfiguration,
-  IPageViewTelemetry,
-  ITelemetryItem,
-  ITelemetryPlugin,
-  PropertiesPlugin
-} from "@microsoft/applicationinsights-web";
+import { ApplicationInsights as AppInsightsPlugin, IAppInsightsCore, IConfig, IConfiguration, IPageViewTelemetry, ITelemetryItem, ITelemetryPlugin, PropertiesPlugin } from "@microsoft/applicationinsights-web";
 import { Action, History, Location } from "history";
 import IReactAISettings from "./IReactAISettings";
 
@@ -131,21 +122,19 @@ class ReactAI implements ITelemetryPlugin {
     this.debugLog("context is set to:", this.context);
   }
 
-  private customDimensionsInitializer(): (item: ITelemetryItem) => boolean | void {
-    return (envelope: ITelemetryItem) => {
-      envelope.baseData = envelope.baseData || {};
-      envelope.baseData.properties = envelope.baseData.properties || {};
-      const properties = envelope.baseData.properties;
-      const props = this.context;
-      for (const key in props) {
-        if (props.hasOwnProperty(key)) {
-          properties[key] = props[key];
-        }
+  private customDimensionsInitializer(envelope: ITelemetryItem): boolean | void {
+    envelope.baseData = envelope.baseData || {};
+    envelope.baseData.properties = envelope.baseData.properties || {};
+    const properties = envelope.baseData.properties;
+    const props = this.context;
+    for (const key in props) {
+      if (props.hasOwnProperty(key)) {
+        properties[key] = props[key];
       }
-      if (this.nextPlugin != null) {
-        this.nextPlugin.processTelemetry(envelope);
-      }
-    };
+    }
+    if (this.nextPlugin != null) {
+      this.nextPlugin.processTelemetry(envelope);
+    }
   }
 
   private addHistoryListener(history: History): void {
