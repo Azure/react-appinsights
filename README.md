@@ -14,7 +14,7 @@ Javascript library to integrate [Application Insights][appinsights-js] in applic
 Using npm:
 
 ```bash
-npm install react-appinsights
+npm install --save react-appinsights@beta
 ```
 
 ## Usage
