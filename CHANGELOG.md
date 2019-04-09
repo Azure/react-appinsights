@@ -16,8 +16,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Upgraded the underlying Application Insights reference to the [new beta version](ai-beta)
 - Completely rewritten in TypeScript
 
-## [Unreleased]
-
 ## [2.0.2] - 2019-01-20
 
 ### Change
@@ -61,7 +59,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 [2.0.0]: https://github.com/Azure/react-appinsights/compare/v1.0.4...v2.0.0
 [2.0.1]: https://github.com/Azure/react-appinsights/compare/v2.0.0...v2.0.1
 [2.0.2]: https://github.com/Azure/react-appinsights/compare/v2.0.1...v2.0.2
-[3.0.0-rc5]: https://github.com/Azure/react-appinsights/compare/v2.0.1...TypeScript-rewrite
+[3.0.0-rc5]: https://github.com/Azure/react-appinsights/compare/v2.0.2...v3.0.0-rc5
 [3.0.0-rc6]: https://github.com/Azure/react-appinsights/compare/v3.0.0-rc5...v3.0.0-rc6
 [ai-beta]: https://www.npmjs.com/package/@microsoft/applicationinsights-web/v/2.0.0-beta.3
 [ai-latest-rc]: https://www.npmjs.com/package/@microsoft/applicationinsights-web/v/2.0.0-rc1
