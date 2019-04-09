@@ -9,6 +9,10 @@ Javascript library to integrate [Application Insights][appinsights-js] in applic
 - React components usage statistics
 - API to extend the standard telemetry with additional dimensions
 
+## IMPORTANT - please read!
+
+Please note that the latest stable version of this package is 2.0.2 and the corresponding documentation for this version resides [here][2-0-2]. However, the package is soon going to be upgraded to its next major version (3.0.0). The release candidate (3.0.0-rc5) for this version is published [here][3-0-0-rc-5]. The content of this readme refers to the next major version.
+
 ## Installation
 
 Using npm:
@@ -143,3 +147,5 @@ Refer to [this doc][appinsights-js-api] for information on the Javascript API of
 [appinsights-nodejs]: https://azure.microsoft.com/en-us/documentation/articles/app-insights-nodejs/
 [appinsights-js-api]: https://github.com/Microsoft/ApplicationInsights-JS/blob/master/API-reference.md
 [react-router]: https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components
+[2-0-2]: https://github.com/Azure/react-appinsights/tree/v2.0.2
+[3-0-0-rc-5]: https://www.npmjs.com/package/react-appinsights/v/3.0.0-rc.5
