@@ -1,11 +1,10 @@
-import nodeResolve from "rollup-plugin-node-resolve";
-import multiEntry from "rollup-plugin-multi-entry";
 import cjs from "rollup-plugin-commonjs";
+import json from "rollup-plugin-json";
+import multiEntry from "rollup-plugin-multi-entry";
+import nodeBuiltins from "rollup-plugin-node-builtins";
+import nodeResolve from "rollup-plugin-node-resolve";
 import replace from "rollup-plugin-replace";
 import { uglify } from "rollup-plugin-uglify";
-import { terser } from "rollup-plugin-terser";
-
-import nodeBuiltins from "rollup-plugin-node-builtins";
 import viz from "rollup-plugin-visualizer";
 
 const pkg = require("./package.json");
@@ -19,6 +18,7 @@ export function nodeConfig(test = false) {
     external: depNames.concat(externalNodeBuiltins),
     output: { file: "dist/index.js", format: "cjs", sourcemap: true },
     plugins: [
+      json(),
       replace({
         delimiters: ["", ""],
         values: {
@@ -34,7 +34,7 @@ export function nodeConfig(test = false) {
 
   if (test) {
     // entry point is every test file
-    baseConfig.input = "dist-esm/test/**/*.spec.js";
+    baseConfig.input = "dist-esm/test/**/*.js";
     baseConfig.plugins.unshift(multiEntry({ exports: false }));
 
     // different output file
@@ -61,6 +61,7 @@ export function browserConfig(test = false) {
       globals: { "ms-rest-js": "msRest" }
     },
     plugins: [
+      json(),
       replace(
         // ms-rest-js is externalized so users must include it prior to using this bundle.
         {
@@ -78,7 +79,18 @@ export function browserConfig(test = false) {
         browser: true
       }),
       cjs({
-        namedExports: { events: ["EventEmitter"] }
+        namedExports: {
+          events: ["EventEmitter"],
+          "node_modules/@microsoft/applicationinsights-core-js/browser/applicationinsights-core-js.min.js": [
+            "AppInsightsCore",
+            "LoggingSeverity",
+            "_InternalMessageId",
+            "CoreUtils",
+            "DiagnosticLogger"
+          ],
+          "node_modules/react/index.js": ["Children", "Component", "PropTypes", "createElement"],
+          "node_modules/react-dom/index.js": ["render"]
+        }
       }),
       nodeBuiltins(),
       viz({ filename: "browser/browser-stats.html", sourcemap: false })
@@ -87,7 +99,7 @@ export function browserConfig(test = false) {
   };
 
   if (test) {
-    baseConfig.input = "dist-esm/test/**/*.spec.js";
+    baseConfig.input = "dist-esm/test/**/*.js";
     baseConfig.plugins.unshift(multiEntry({ exports: false }));
     baseConfig.output.file = "test-browser/index.js";
   } else {

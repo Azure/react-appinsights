@@ -8,8 +8,6 @@ pool:
 
 strategy:
   matrix:
-    node_6_x:
-      node_version: 6.x
     node_8_x:
       node_version: 8.x
     node_10_x:
@@ -28,3 +26,13 @@ steps:
     npm run build
     npm test
   displayName: 'npm install, build and test'
+
+- task: PublishTestResults@2
+  inputs:
+      testResultsFiles: '**/test-report.xml' 
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml'
+    reportDirectory: '$(System.DefaultWorkingDirectory)/coverage/lcov-report'
