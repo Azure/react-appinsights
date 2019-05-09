@@ -87,6 +87,7 @@ export default function withAITracking<P>(Component: React.ComponentType<P>, com
           onMouseDown={this.trackActivity}
           onTouchStart={this.trackActivity}
           onTouchMove={this.trackActivity}
+          className="appinsights-hoc"
         >
           <Component {...this.props} />
         </div>
